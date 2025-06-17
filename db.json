@@ -1,0 +1,122 @@
+{
+  "leads": [
+    {
+      "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+      "name": "John Doe",
+      "email": "john.doe@acme.com",
+      "company": "Acme Corporation",
+      "title": "Chief Technology Officer",
+      "phone": "+1 (555) 123-4567",
+      "tags": ["enterprise", "tech", "high-priority"],
+      "notes": "Interested in enterprise solution",
+      "createdAt": "2024-03-15T08:30:00Z"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "name": "Jane Smith",
+      "email": "jane.smith@techstart.io",
+      "company": "TechStart",
+      "title": "Founder",
+      "phone": "+1 (555) 987-6543",
+      "tags": ["startup", "referral"],
+      "notes": "Startup looking for scalable solutions",
+      "createdAt": "2024-03-18T10:20:00Z"
+    },
+    {
+      "id": "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+      "name": "Robert Chen",
+      "email": "robert.chen@globaltech.com",
+      "company": "Global Technologies",
+      "title": "VP of Sales",
+      "phone": "+1 (555) 234-5678",
+      "tags": ["enterprise", "sales"],
+      "notes": "Follow up needed on pricing discussion",
+      "createdAt": "2024-03-10T09:15:00Z"
+    },
+    {
+      "id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+      "name": "Maria Garcia",
+      "email": "m.garcia@innovate.co",
+      "company": "Innovate Co",
+      "title": "Director of Operations",
+      "phone": "+1 (555) 345-6789",
+      "tags": ["operations", "mid-market"],
+      "notes": "Met at TechConf 2024",
+      "createdAt": "2024-03-05T15:45:00Z"
+    },
+    {
+      "id": "8f7e6d5c-4b3a-2m1n-9o8p-7q6r5s4t3u2v",
+      "name": "Alex Thompson",
+      "email": "alex.t@futuresoft.dev",
+      "company": "FutureSoft",
+      "title": "Lead Developer",
+      "phone": "+1 (555) 456-7890",
+      "tags": ["technical", "api-integration"],
+      "notes": "Requested demo of API integration",
+      "createdAt": "2024-03-19T11:00:00Z"
+    },
+    {
+      "id": "9b4f8d7e-6c5b-4a3d-2n1m-8p7q6r5s4t3u",
+      "name": "Sarah Johnson",
+      "email": "sjohnson@cloudscape.net",
+      "company": "CloudScape",
+      "title": "Product Manager",
+      "phone": "+1 (555) 567-8901",
+      "tags": ["product", "mobile"],
+      "notes": "Interested in mobile solutions",
+      "createdAt": "2024-03-12T13:30:00Z"
+    },
+    {
+      "id": "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6",
+      "name": "David Kim",
+      "email": "david.kim@nextstep.org",
+      "company": "NextStep Education",
+      "title": "CEO",
+      "phone": "+1 (555) 678-9012",
+      "tags": ["education", "enterprise"],
+      "notes": "Looking for educational integration",
+      "createdAt": "2024-03-08T16:20:00Z"
+    },
+    {
+      "id": "b2c3d4e5-f6g7-8h9i-0j1k-l2m3n4o5p6q7",
+      "name": "Emily Brown",
+      "email": "e.brown@digitaledge.io",
+      "company": "Digital Edge",
+      "title": "Marketing Director",
+      "phone": "+1 (555) 789-0123",
+      "tags": ["marketing", "analytics"],
+      "notes": "Interested in analytics features",
+      "createdAt": "2024-03-20T09:00:00Z"
+    },
+    {
+      "id": "c3d4e5f6-g7h8-9i0j-1k2l-m3n4o5p6q7r8",
+      "name": "   Dr. Messy  Data  ",
+      "email": "MESSY.DATA@mixed-case.com",
+      "company": null,
+      "title": "",
+      "phone": "12345",
+      "tags": ["", null, "  TEST  ", "test"],
+      "notes": null,
+      "createdAt": "invalid-date"
+    },
+    {
+      "id": "d4e5f6g7-h8i9-0j1k-2l3m-n4o5p6q7r8s9",
+      "name": "Long Entry Person",
+      "email": "long.entry@verbose-corp.com",
+      "company": "Verbose Corporation International Holdings Ltd. (Subsidiary of Long Names Group)",
+      "title": "Senior Executive Vice President of Strategic Innovation and Digital Transformation Initiatives",
+      "phone": "+1 (555) 999-8888 ext. 12345",
+      "tags": [
+        "needs-follow-up",
+        "enterprise",
+        "complex-deal",
+        "multiple-stakeholders",
+        "high-value",
+        "q2-target",
+        "international"
+      ],
+      "notes": "Initial meeting conducted on March 15th with the following attendees: John (CEO), Sarah (CTO), Mike (CFO), and entire board of directors. Client expressed strong interest in our enterprise solution, particularly the advanced analytics module. Key points discussed:\n\n1. Need for seamless integration with their legacy systems (SAP, Oracle, custom in-house solutions)\n2. Compliance requirements: SOC2, GDPR, CCPA, ISO27001\n3. Custom reporting requirements for 15 different departments\n4. Multi-language support needed for 12 regional offices\n5. Complex approval workflow with 7 stages\n\nBudget range: $500k-$1M\nTimeline: Must go live before Q4\n\nFollow-up tasks:\n- Schedule technical deep dive\n- Prepare custom demo for board\n- Draft preliminary project timeline\n- Coordinate with legal for compliance review\n- Engage solution architects for infrastructure planning\n\nRisks:\n* Complex organizational structure\n* Multiple decision makers\n* Tight deadline\n* Legacy system constraints",
+      "createdAt": "2024-03-01T00:00:00Z"
+    }
+  ]
+}
