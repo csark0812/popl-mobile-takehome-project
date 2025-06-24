@@ -1,4 +1,5 @@
 import ChangeThemeAction from '@components/ChangeThemeAction';
+import LeadCard from '@components/LeadCard';
 import ScrollHeader from '@components/ScrollHeader';
 import StickyHeader from '@components/StickyHeader';
 import { useLeads } from '@hooks/api';
@@ -14,24 +15,6 @@ import Animated, {
 } from 'react-native-reanimated';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'LeadList'>;
-
-// LeadCard component
-function LeadCard({
-  id,
-  name,
-  email,
-  navigation,
-}: {
-  id: string;
-  name: string;
-  email: string;
-  navigation: Props['navigation'];
-}) {
-  const handlePress = () => {
-    navigation.navigate('LeadDetail', { leadId: id });
-  };
-  return <List.Item title={name} description={email} onPress={handlePress} />;
-}
 
 export default function LeadListScreen({ navigation }: Props) {
   const { data: leads, isLoading, isError } = useLeads();
@@ -105,9 +88,7 @@ export default function LeadListScreen({ navigation }: Props) {
       <Animated.FlatList
         data={leads}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <LeadCard {...item} id={item.id.toString()} navigation={navigation} />
-        )}
+        renderItem={({ item }) => <LeadCard {...item} />}
         ListHeaderComponent={
           <ScrollHeader
             scrollY={scrollY}

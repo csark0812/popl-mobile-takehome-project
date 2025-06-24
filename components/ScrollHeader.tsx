@@ -48,7 +48,6 @@ const ScrollHeader: React.FC<ScrollHeaderProps> = ({
     <Animated.View onLayout={handleLayout} style={animatedStyle}>
       <Appbar.Header
         style={{
-          marginBottom: 10,
           backgroundColor: 'transparent',
           elevation: 0,
           shadowOpacity: 0,
@@ -56,13 +55,13 @@ const ScrollHeader: React.FC<ScrollHeaderProps> = ({
           overflow: 'hidden',
         }}
       >
-        {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
+        {back ? (
+          <Appbar.BackAction size={20} onPress={navigation.goBack} />
+        ) : null}
         <View style={styles.contentContainer}>
           <Appbar.Content
             title={route?.name === 'LeadList' ? greeting : title}
-            titleStyle={
-              route?.name === 'LeadList' ? styles.greeting : undefined
-            }
+            titleStyle={styles.greeting}
           />
 
           {renderRight?.()}

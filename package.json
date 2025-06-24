@@ -22,6 +22,8 @@
     "expo": "53.0.12",
     "expo-blur": "^14.1.5",
     "expo-linear-gradient": "^14.1.5",
+    "expo-mail-composer": "~14.1.4",
+    "expo-sms": "~13.1.4",
     "expo-status-bar": "~2.2.3",
     "immer": "^10.1.1",
     "react": "19.0.0",
