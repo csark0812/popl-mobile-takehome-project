@@ -1,5 +1,5 @@
-import { Lead } from '../types';
-import { api } from './api';
+import { api } from '@api/api';
+import { Lead } from '@types';
 
 export const leadsApi = {
   getAll: () => api.get<Lead[]>('/leads'),

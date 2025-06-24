@@ -1,0 +1,25 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# MCP Tools Usage Rule
+
+When solving coding tasks in this project, follow these guidelines for using your mcp tools:
+
+1. **ALWAYS follow the tool call schema exactly and include all required parameters.**
+2. **NEVER call tools that are not available.**
+3. **Bias toward using tools to gather or confirm useful information.**
+4. **Use tools to retain or reason through information as needed.**
+5. **Use tools when they will improve accuracy or clarity.**
+6. **Err on the side of gathering more context via tools.**
+7. **If a tool call is successful but the response from the tool call returns an error, attempt to rerun the tool up to 3 times based on the error provided.**
+8. **Tool calls that are additive (gathering information, reasoning, or analysis) are auto-approved and do not require explicit user confirmation.**
+9. **Tool calls that are destructive (deleting, overwriting, or making irreversible changes) MUST require explicit user approval before execution.**
+
+Use your tools proactively to:
+- Gather information about the codebase, files, or project structure.
+- Confirm assumptions or fill in knowledge gaps.
+- Retain, reason through, or analyze information as needed for the task.
+- Ensure your answers are as accurate and clear as possible.
+- Prefer tool-based investigation over guessing or making unsupported assumptions.

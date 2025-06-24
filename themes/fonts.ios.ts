@@ -1,0 +1,111 @@
+import { MD3Typescale } from 'react-native-paper/lib/typescript/types';
+
+const fonts = {
+  displayLarge: {
+    fontFamily: 'System',
+    fontWeight: '400',
+    fontSize: 57,
+    lineHeight: 64,
+    letterSpacing: 0,
+  },
+  displayMedium: {
+    fontFamily: 'System',
+    fontWeight: '400',
+    fontSize: 45,
+    lineHeight: 52,
+    letterSpacing: 0,
+  },
+  displaySmall: {
+    fontFamily: 'System',
+    fontWeight: '400',
+    fontSize: 36,
+    lineHeight: 44,
+    letterSpacing: 0,
+  },
+  headlineLarge: {
+    fontFamily: 'System',
+    fontWeight: '400',
+    fontSize: 32,
+    lineHeight: 40,
+    letterSpacing: 0,
+  },
+  headlineMedium: {
+    fontFamily: 'System',
+    fontWeight: '400',
+    fontSize: 28,
+    lineHeight: 36,
+    letterSpacing: 0,
+  },
+  headlineSmall: {
+    fontFamily: 'System',
+    fontWeight: '400',
+    fontSize: 24,
+    lineHeight: 32,
+    letterSpacing: 0,
+  },
+  titleLarge: {
+    fontFamily: 'System',
+    fontWeight: '400',
+    fontSize: 22,
+    lineHeight: 28,
+    letterSpacing: 0,
+  },
+  titleMedium: {
+    fontFamily: 'System',
+    fontWeight: '500',
+    fontSize: 16,
+    lineHeight: 24,
+    letterSpacing: 0.15,
+  },
+  titleSmall: {
+    fontFamily: 'System',
+    fontWeight: '500',
+    fontSize: 14,
+    lineHeight: 20,
+    letterSpacing: 0.1,
+  },
+  labelLarge: {
+    fontFamily: 'System',
+    fontWeight: '500',
+    fontSize: 14,
+    lineHeight: 20,
+    letterSpacing: 0.1,
+  },
+  labelMedium: {
+    fontFamily: 'System',
+    fontWeight: '500',
+    fontSize: 12,
+    lineHeight: 16,
+    letterSpacing: 0.5,
+  },
+  labelSmall: {
+    fontFamily: 'System',
+    fontWeight: '500',
+    fontSize: 11,
+    lineHeight: 16,
+    letterSpacing: 0.5,
+  },
+  bodyLarge: {
+    fontFamily: 'System',
+    fontWeight: '400',
+    fontSize: 16,
+    lineHeight: 24,
+    letterSpacing: 0.15,
+  },
+  bodyMedium: {
+    fontFamily: 'System',
+    fontWeight: '400',
+    fontSize: 14,
+    lineHeight: 20,
+    letterSpacing: 0.25,
+  },
+  bodySmall: {
+    fontFamily: 'System',
+    fontWeight: '400',
+    fontSize: 12,
+    lineHeight: 16,
+    letterSpacing: 0.4,
+  },
+} as MD3Typescale;
+
+export default fonts;
