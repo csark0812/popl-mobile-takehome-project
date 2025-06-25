@@ -2,7 +2,6 @@ import AboutThisLead from '@components/AboutThisLead';
 import ActionBarIcon from '@components/ActionBarIcon';
 import ActionButtons from '@components/ActionButtons';
 import ContactInformation from '@components/ContactInformation';
-import DetailBottomActions from '@components/DetailBottomActions';
 import DetailsHeroSection from '@components/DetailsHeroSection';
 import LoadingOverlay, { LoadingOverlayRef } from '@components/LoadingOverlay';
 import ScrollHeader from '@components/ScrollHeader';
@@ -320,11 +319,19 @@ export default function LeadDetailScreen({ route, navigation }: Props) {
           {/* Contact Information */}
           <ContactInformation lead={lead} />
 
-          {/* Bottom Actions */}
-          <DetailBottomActions
-            onEditLead={handleEdit}
-            onDeleteLead={handleDeleteLead}
-          />
+          {/* Delete Button */}
+          <View style={styles.deleteButtonContainer}>
+            <Button
+              mode="outlined"
+              onPress={handleDeleteLead}
+              icon="delete"
+              style={[styles.deleteButton, { borderColor: theme.colors.error }]}
+              textColor={theme.colors.error}
+              buttonColor="transparent"
+            >
+              Delete Lead
+            </Button>
+          </View>
         </View>
       </KeyboardAwareScrollView>
 
@@ -362,5 +369,12 @@ const styles = StyleSheet.create({
   fab: {
     position: 'absolute',
     right: 24,
+  },
+  deleteButtonContainer: {
+    marginBottom: 16,
+  },
+  deleteButton: {
+    borderRadius: 8,
+    borderWidth: 1,
   },
 });
