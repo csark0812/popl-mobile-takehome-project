@@ -84,11 +84,20 @@ This project implements the Popl lead management flow as specified in the take-h
    - Session state persisted to AsyncStorage via Zustand middleware
    - User preferences and authentication survive app restarts
 
-## 🧪 Mock API Setup
+## 🏁 Getting Started
 
-```bash
-npm run api  # Serves from http://localhost:3001/leads
-```
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+2. **Start the app:**
+   ```bash
+   npm run start
+   ```
+3. **Start the mock API server (in a separate terminal):**
+   ```bash
+   npm run api  # Serves from http://localhost:3001/leads
+   ```
 
 ## Known Limitations
 
