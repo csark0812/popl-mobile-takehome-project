@@ -51,6 +51,10 @@ This project implements the Popl lead management flow as specified in the take-h
 
 ## 💡 Optional Enhancements Completed
 
+- **📝 Edit Lead Screen:**
+  - Full-featured edit screen for leads
+  - See [`screens/EditLeadScreen.tsx`](./screens/EditLeadScreen.tsx)
+
 1. **🔧 Dynamic Form Support**
 
    - Form configuration loaded from `/form-config` endpoint via [`hooks/api.ts`](./hooks/api.ts)
