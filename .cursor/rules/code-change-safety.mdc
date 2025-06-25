@@ -3,11 +3,33 @@ description:
 globs: 
 alwaysApply: true
 ---
-# Code Change Safety and Debugging Rule
+# Code Change Safety and Debugging Guidelines
 
-- Only change code if you are confident it addresses the root cause of the problem, not just the surface behavior.
-- After making a fix, double check that no new errors or warnings were introduced. If any appear, verify they are unrelated to the task and do not impact correctness, stability, or expected output.
-- If the root cause isn't fully clear:
-  1. Add logging or descriptive errors to trace internal state and flow.
-  2. Focus on identifying and fixing the underlying issue—not just silencing symptoms.
-- When investigating bugs or unclear issues, proactively try to gather external information (such as documentation, error explanations, or similar bug reports) via tool calls to improve your understanding and solution quality.
+## Root Cause Analysis First
+• **Target the source, not symptoms**: Only make code changes when you're confident they address the underlying problem, not just the visible behavior
+• **Resist quick fixes**: Avoid patches that mask issues without resolving the fundamental cause
+• **Validate your understanding**: Before changing code, articulate what you believe is broken and why your fix addresses that specific issue
+
+## Change Validation Protocol
+• **Immediate verification**: After any code modification, check for new errors, warnings, or unexpected output
+• **Impact assessment**: If new issues appear, determine whether they're:
+  - Related to your changes (must fix immediately)
+  - Pre-existing but now visible (document but may not need immediate attention)
+  - Unrelated to the current task (note but don't let them block progress)
+• **Correctness check**: Verify the fix produces the expected behavior under normal and edge case conditions
+
+## Investigation Strategy
+When the root cause isn't clear:
+• **Add diagnostic instrumentation**: Insert logging, debug prints, or descriptive error messages to trace program flow and internal state
+• **Research externally**: Use tool calls to gather relevant documentation, error explanations, or similar bug reports that inform your understanding
+• **Document findings**: Keep track of what you've learned during investigation to avoid repeating work
+
+## Debugging Mindset
+• **Understand before fixing**: Resist the urge to change code until you can explain why the problem occurs
+• **Trace data flow**: Follow how data moves through the system to identify where it becomes incorrect
+• **Question assumptions**: Challenge your initial hypotheses about what's wrong
+• **Preserve evidence**: Don't immediately "clean up" code that might provide clues about the issue
+
+---
+
+*Core principle: Confident diagnosis leads to effective fixes. When in doubt, investigate deeper rather than guess.*

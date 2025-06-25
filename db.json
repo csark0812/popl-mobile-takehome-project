@@ -1,4 +1,91 @@
 {
+  "form-config": {
+    "title": "Lead Information",
+    "description": "Enter the details for this lead contact",
+    "fields": [
+      {
+        "name": "name",
+        "label": "Full Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "Enter full name",
+        "validation": {
+          "minLength": 2,
+          "maxLength": 100,
+          "message": "Name must be between 2 and 100 characters"
+        }
+      },
+      {
+        "name": "email",
+        "label": "Email Address",
+        "type": "email",
+        "required": true,
+        "placeholder": "example@company.com",
+        "validation": {
+          "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+          "message": "Please enter a valid email address"
+        }
+      },
+      {
+        "name": "company",
+        "label": "Company",
+        "type": "text",
+        "required": false,
+        "placeholder": "Enter company name",
+        "validation": {
+          "maxLength": 150,
+          "message": "Company name cannot exceed 150 characters"
+        }
+      },
+      {
+        "name": "title",
+        "label": "Job Title",
+        "type": "text",
+        "required": false,
+        "placeholder": "Enter job title",
+        "validation": {
+          "maxLength": 100,
+          "message": "Job title cannot exceed 100 characters"
+        }
+      },
+      {
+        "name": "phone",
+        "label": "Phone Number",
+        "type": "tel",
+        "required": false,
+        "placeholder": "+1 (555) 123-4567",
+        "validation": {
+          "pattern": "^[\\+]?[\\d\\s\\(\\)\\-\\.]+$",
+          "message": "Please enter a valid phone number"
+        }
+      },
+      {
+        "name": "tags",
+        "label": "Tags",
+        "type": "tags",
+        "required": false,
+        "placeholder": "Add tags (e.g., enterprise, high-priority, referral)",
+        "validation": {
+          "message": "Tags help organize and filter leads"
+        }
+      },
+      {
+        "name": "notes",
+        "label": "Notes",
+        "type": "textarea",
+        "required": false,
+        "placeholder": "Add any additional notes about this lead...",
+        "multiline": true,
+        "rows": 4,
+        "validation": {
+          "maxLength": 2000,
+          "message": "Notes cannot exceed 2000 characters"
+        }
+      }
+    ],
+    "submitLabel": "Save Lead",
+    "cancelLabel": "Cancel"
+  },
   "leads": [
     {
       "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
@@ -7,11 +94,7 @@
       "company": "Acme Corporation",
       "title": "Chief Technology Officer",
       "phone": "+1 (555) 123-4567",
-      "tags": [
-        "enterprise",
-        "tech",
-        "high-priority"
-      ],
+      "tags": ["enterprise", "tech", "high-priority"],
       "notes": "Interested in enterprise solution",
       "createdAt": "2024-03-15T08:30:00Z"
     },
@@ -22,10 +105,7 @@
       "company": "TechStart",
       "title": "Founder",
       "phone": "+1 (555) 987-6543",
-      "tags": [
-        "startup",
-        "referral"
-      ],
+      "tags": ["startup", "referral"],
       "notes": "Startup looking for scalable solutions",
       "createdAt": "2024-03-18T10:20:00Z"
     },
@@ -36,10 +116,7 @@
       "company": "Global Technologies",
       "title": "VP of Sales",
       "phone": "+1 (555) 234-5678",
-      "tags": [
-        "enterprise",
-        "sales"
-      ],
+      "tags": ["enterprise", "sales"],
       "notes": "Follow up needed on pricing discussion",
       "createdAt": "2024-03-10T09:15:00Z"
     },
@@ -50,10 +127,7 @@
       "company": "Innovate Co",
       "title": "Director of Operations",
       "phone": "+1 (555) 345-6789",
-      "tags": [
-        "operations",
-        "mid-market"
-      ],
+      "tags": ["operations", "mid-market"],
       "notes": "Met at TechConf 2024",
       "createdAt": "2024-03-05T15:45:00Z"
     },
@@ -64,10 +138,7 @@
       "company": "CloudScape",
       "title": "Product Manager",
       "phone": "+1 (555) 567-8901",
-      "tags": [
-        "product",
-        "mobile"
-      ],
+      "tags": ["product", "mobile"],
       "notes": "Interested in mobile solutions",
       "createdAt": "2024-03-12T13:30:00Z"
     },
@@ -78,9 +149,7 @@
       "company": "NextStep Education",
       "title": "CEO",
       "phone": "+1 (555) 678-9012",
-      "tags": [
-        "enterprise"
-      ],
+      "tags": ["enterprise"],
       "notes": "Looking for educational integration",
       "createdAt": "2024-03-08T16:20:00Z"
     },
@@ -91,10 +160,7 @@
       "company": "Digital Edge",
       "title": "Marketing Director",
       "phone": "+1 (555) 789-0123",
-      "tags": [
-        "marketing",
-        "analytics"
-      ],
+      "tags": ["marketing", "analytics"],
       "notes": "Interested in analytics features",
       "createdAt": "2024-03-20T09:00:00Z"
     },
@@ -102,10 +168,7 @@
       "id": "c3d4e5f6-g7h8-9i0j-1k2l-m3n4o5p6q7r8",
       "name": "Dr. Messy Data",
       "email": "messy.data@mixed-case.com",
-      "tags": [
-        "TEST",
-        "test"
-      ],
+      "tags": ["TEST", "test"],
       "notes": "Test",
       "createdAt": "2025-06-25T10:24:34.094Z"
     },

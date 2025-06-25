@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Icon, IconButton, Text, useTheme } from 'react-native-paper';
+import { Icon, Text, useTheme } from 'react-native-paper';
+import ActionBarIcon from './ActionBarIcon';
 
 export type ContactRowProps = {
   icon: string;
@@ -44,13 +45,13 @@ const ContactRow: React.FC<ContactRowProps> = ({
             </Text>
           </View>
           {onCopy && (
-            <IconButton
+            <ActionBarIcon
               icon="content-copy"
               size={16}
               onPress={onCopy}
               accessibilityLabel={`Copy ${label}`}
               style={styles.copyButton}
-              iconColor={theme.colors.primary}
+              type="light"
             />
           )}
         </View>
@@ -94,7 +95,6 @@ const createStyles = (theme: any) =>
     },
     copyButton: {
       margin: 0,
-      backgroundColor: '#E3F2FD', // Light blue background
     },
   });
 

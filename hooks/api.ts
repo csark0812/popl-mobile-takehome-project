@@ -1,4 +1,4 @@
-import { leadsApi } from '@api/leadsApi';
+import { FormConfig, leadsApi } from '@api/leadsApi';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Lead } from '@types';
 import { cleanLeadData, cleanLeadsData } from '@utils';
@@ -153,5 +153,15 @@ export function useDeleteLead() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['leads'] });
     },
+  });
+}
+
+// Fetch form configuration
+export function useFormConfig() {
+  return useQuery<FormConfig, Error>({
+    queryKey: ['form-config'],
+    queryFn: () => leadsApi.getFormConfig().then((res) => res.data),
+    staleTime: 5 * 60 * 1000, // 5 minutes - form config doesn't change often
+    gcTime: 30 * 60 * 1000, // 30 minutes
   });
 }
