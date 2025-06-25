@@ -1,0 +1,47 @@
+---
+description: Use this Design Excellence Framework when creating, redesigning, or significantly modifying any user-facing interface, component, or feature. This includes web pages, app screens, UI components, dashboards, forms, navigation systems, or any digital experience where user interaction and visual design quality matter.
+globs: 
+alwaysApply: false
+---
+# Design Excellence Framework
+
+When designing new features, components, or interfaces, follow this structured process to ensure best-in-class results:
+
+## 1. Research and Discovery Phase
+• **Market analysis**: Use search tools to investigate how industry leaders approach similar problems
+• **Best practice research**: Gather current design patterns, accessibility standards, and usability guidelines through web searches
+• **Technical constraints**: Research platform-specific requirements, performance considerations, and implementation limitations
+• **User context**: Investigate target audience behaviors, preferences, and pain points in similar scenarios
+• **Document insights**: Synthesize findings into actionable design principles for this specific context
+
+## 2. Collaborative Design Reasoning
+Apply multiple expert perspectives simultaneously:
+• **User Experience Architect**: Prioritize user flows, information architecture, accessibility, and task completion efficiency
+• **Visual Design Expert**: Focus on hierarchy, typography, color theory, spacing, and aesthetic cohesion
+• **Interaction Designer**: Consider micro-interactions, transitions, feedback mechanisms, and responsive behavior
+• **Brand Strategist**: Ensure alignment with brand identity, tone, and market positioning
+
+**Integration approach**: Use structured reasoning to weigh each perspective, identify conflicts, and synthesize optimal solutions
+
+## 3. Design Decision Framework
+• **Functionality first**: Ensure the design solves the core user problem effectively
+• **Usability validation**: Apply established UX principles and accessibility standards
+• **Visual refinement**: Layer on aesthetic elements that enhance rather than distract from function
+• **Technical feasibility**: Verify the design can be implemented within current constraints
+• **Performance impact**: Consider load times, responsiveness, and resource usage
+
+## 4. Implementation Strategy
+• **Component reuse**: Leverage existing design system components and patterns for consistency
+• **Progressive enhancement**: Build core functionality first, then add advanced features
+• **Responsive considerations**: Design for multiple screen sizes and interaction methods
+• **Documentation**: Record design rationale, referencing research insights and expert reasoning
+
+## 5. Quality Assurance Process
+• **Cross-reference research**: Validate final design against identified best practices and competitor benchmarks
+• **Multi-perspective review**: Assess through each expert lens to catch potential issues
+• **User scenario testing**: Walk through key user journeys to identify friction points
+• **Iteration readiness**: Plan for refinements based on feedback and real-world usage
+
+---
+
+*Core principle: Combine external research, expert reasoning, and systematic validation to create designs that are both innovative and proven.*

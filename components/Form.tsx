@@ -6,8 +6,15 @@ import DetailTags from '@components/DetailTags';
 import { Lead } from '@types';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useRef } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
-import { Button, Surface, Text, TextInput, useTheme } from 'react-native-paper';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  Button,
+  Icon,
+  Surface,
+  Text,
+  TextInput,
+  useTheme,
+} from 'react-native-paper';
 
 interface FormProps {
   formConfig: FormConfig;
@@ -168,6 +175,18 @@ export default function Form({
         );
 
       case 'image':
+        const handleImagePicker = async () => {
+          const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images'],
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 0.8,
+          });
+          if (!result.canceled && result.assets && result.assets.length > 0) {
+            setValue(field.name, result.assets[0].uri);
+          }
+        };
+
         return (
           <View key={field.name} style={{ marginBottom: 16 }}>
             <Text
@@ -180,38 +199,73 @@ export default function Form({
               {field.label}
             </Text>
             {value ? (
-              <Image
-                source={{ uri: value }}
-                style={{
-                  width: 120,
-                  height: 120,
-                  borderRadius: 8,
-                  marginBottom: 8,
-                }}
-                resizeMode="cover"
-              />
-            ) : null}
-            <Button
-              mode="outlined"
-              icon="image"
-              onPress={async () => {
-                const result = await ImagePicker.launchImageLibraryAsync({
-                  mediaTypes: ['images'],
-                  allowsEditing: true,
-                  aspect: [1, 1],
-                  quality: 0.8,
-                });
-                if (
-                  !result.canceled &&
-                  result.assets &&
-                  result.assets.length > 0
-                ) {
-                  setValue(field.name, result.assets[0].uri);
-                }
-              }}
-            >
-              {value ? 'Change Image' : field.placeholder || 'Select Image'}
-            </Button>
+              <View style={styles.imageContainer}>
+                <Image
+                  source={{ uri: value }}
+                  style={{
+                    width: 150,
+                    height: 150,
+                    borderRadius: 8,
+                  }}
+                  resizeMode="cover"
+                />
+                <TouchableOpacity
+                  style={styles.clearImageButton}
+                  onPress={() => setValue(field.name, '')}
+                  accessibilityLabel="Remove image"
+                >
+                  <Surface
+                    style={[
+                      styles.clearImageButtonSurface,
+                      { backgroundColor: theme.colors.errorContainer },
+                    ]}
+                    elevation={2}
+                  >
+                    <Icon
+                      source="delete"
+                      size={20}
+                      color={theme.colors.onErrorContainer}
+                    />
+                  </Surface>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <TouchableOpacity
+                style={styles.imagePlaceholder}
+                onPress={handleImagePicker}
+              >
+                <Surface
+                  style={[
+                    styles.imagePlaceholderSurface,
+                    {
+                      borderColor: theme.colors.outline,
+                      backgroundColor: theme.colors.surfaceVariant,
+                    },
+                  ]}
+                  elevation={0}
+                >
+                  <View style={styles.imagePlaceholderContent}>
+                    <Icon
+                      source="image"
+                      size={32}
+                      color={theme.colors.onSurfaceVariant}
+                    />
+                    <Text
+                      style={[
+                        theme.fonts.bodyMedium,
+                        {
+                          color: theme.colors.onSurfaceVariant,
+                          marginTop: 8,
+                          textAlign: 'center',
+                        },
+                      ]}
+                    >
+                      {field.placeholder || 'Select Image'}
+                    </Text>
+                  </View>
+                </Surface>
+              </TouchableOpacity>
+            )}
           </View>
         );
 
@@ -316,5 +370,40 @@ const styles = StyleSheet.create({
   errorText: {
     marginTop: 4,
     fontSize: 12,
+  },
+  imagePlaceholder: {
+    width: 150,
+    height: 150,
+  },
+  imagePlaceholderSurface: {
+    width: 150,
+    height: 150,
+    borderRadius: 8,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 12,
+  },
+  imagePlaceholderContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageContainer: {
+    position: 'relative',
+    width: 150,
+    height: 150,
+  },
+  clearImageButton: {
+    position: 'absolute',
+    top: 4,
+    right: 4,
+    padding: 4,
+  },
+  clearImageButtonSurface: {
+    width: 28,
+    height: 28,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

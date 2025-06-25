@@ -3,6 +3,7 @@ import ActionBarIcon from '@components/ActionBarIcon';
 import ActionButtons from '@components/ActionButtons';
 import ContactInformation from '@components/ContactInformation';
 import DetailsHeroSection from '@components/DetailsHeroSection';
+import LeadDetailSkeleton from '@components/LeadDetailSkeleton';
 import LoadingOverlay, { LoadingOverlayRef } from '@components/LoadingOverlay';
 import ScrollHeader from '@components/ScrollHeader';
 import StickyHeader from '@components/StickyHeader';
@@ -19,14 +20,7 @@ import {
   View,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import {
-  ActivityIndicator,
-  Button,
-  Card,
-  Surface,
-  Text,
-  useTheme,
-} from 'react-native-paper';
+import { Button, Card, Surface, Text, useTheme } from 'react-native-paper';
 import Animated, { useSharedValue } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -197,21 +191,19 @@ export default function LeadDetailScreen({ route, navigation }: Props) {
 
   if (isLoading) {
     return (
-      <View
-        style={[
-          styles.centerContainer,
-          { backgroundColor: theme.colors.background },
-        ]}
-      >
-        <ActivityIndicator size="large" color={theme.colors.primary} />
-        <Text
+      <View style={{ flex: 1 }}>
+        <ScrollHeader
+          scrollY={scrollY}
+          renderRight={renderLightHeaderActions}
+        />
+        <View
           style={[
-            theme.fonts.bodyLarge,
-            { marginTop: 16, color: theme.colors.onSurface },
+            styles.centerContainer,
+            { backgroundColor: theme.colors.background },
           ]}
         >
-          Loading lead details...
-        </Text>
+          <LeadDetailSkeleton />
+        </View>
       </View>
     );
   }
@@ -349,7 +341,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 24,
   },
   card: {
     marginBottom: 16,

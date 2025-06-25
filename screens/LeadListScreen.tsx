@@ -1,6 +1,7 @@
 import ActionBarIcon from '@components/ActionBarIcon';
 import { FilterState } from '@components/FilterPopover';
 import LeadCard from '@components/LeadCard';
+import LeadCardSkeleton from '@components/LeadCardSkeleton';
 import ScrollHeader from '@components/ScrollHeader';
 import SearchAndFilters, {
   SearchAndFiltersRef,
@@ -92,8 +93,23 @@ export default function LeadListScreen({ navigation }: Props) {
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <List.Item title="Loading..." />
+      <View style={{ flex: 1 }}>
+        <ScrollHeader
+          scrollY={scrollY}
+          renderRight={() => (
+            <ActionBarIcon
+              icon="cog"
+              onPress={() => settingsPopoverRef.current?.show()}
+              accessibilityLabel="Settings"
+              type="light"
+            />
+          )}
+        ></ScrollHeader>
+        <View style={{ paddingTop: 20 }}>
+          {Array.from({ length: 5 }).map((_, index) => (
+            <LeadCardSkeleton key={`skeleton-${index}`} />
+          ))}
+        </View>
       </View>
     );
   }
@@ -153,7 +169,6 @@ export default function LeadListScreen({ navigation }: Props) {
               shadowOffset: { width: 0, height: 1 },
               shadowOpacity: 0.15,
               shadowRadius: 2,
-              borderRadius: 8,
               margin: 8,
             }}
           >
