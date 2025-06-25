@@ -4,8 +4,12 @@ import { SharedValue, useSharedValue } from 'react-native-reanimated';
 interface NavigationPageContextType {
   headerHeight: number;
   setHeaderHeight: (height: number) => void;
+  stickyHeaderHeight: number;
+  setStickyHeaderHeight: (height: number) => void;
   headerSharedValue: SharedValue<number>;
   scrollHeader: (value: number) => void;
+  alwaysShow: boolean;
+  setAlwaysShow: (show: boolean) => void;
   options?: any;
   route?: any;
   navigation?: any;
@@ -27,6 +31,8 @@ export const NavigationPageProvider = ({
   navigation?: any;
 }) => {
   const [headerHeight, setHeaderHeight] = useState(0);
+  const [stickyHeaderHeight, setStickyHeaderHeight] = useState(0);
+  const [alwaysShow, setAlwaysShow] = useState(false);
   const headerSharedValue = useSharedValue(0);
   const scrollHeader = (value: number) => {
     headerSharedValue.value = value;
@@ -36,8 +42,12 @@ export const NavigationPageProvider = ({
       value={{
         headerHeight,
         setHeaderHeight,
+        stickyHeaderHeight,
+        setStickyHeaderHeight,
         headerSharedValue,
         scrollHeader,
+        alwaysShow,
+        setAlwaysShow,
         options,
         route,
         navigation,

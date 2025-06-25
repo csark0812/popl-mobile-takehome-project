@@ -8,24 +8,19 @@ interface TagsProps {
 }
 
 const Tags: React.FC<TagsProps> = ({ tags, leadId }) => {
-  const MAX_VISIBLE_TAGS = 2;
-
-  // Clean and filter tags
-  const cleanTags =
-    tags?.filter((tag) => tag && tag.trim() !== '').map((tag) => tag.trim()) ||
-    [];
+  const MAX_VISIBLE_TAGS = 3;
 
   // Don't render anything if no tags
-  if (cleanTags.length === 0) {
+  if (!tags || tags.length === 0) {
     return null;
   }
 
-  const hasMoreTags = cleanTags.length > MAX_VISIBLE_TAGS;
-  const remainingCount = cleanTags.length - MAX_VISIBLE_TAGS;
+  const hasMoreTags = tags.length > MAX_VISIBLE_TAGS;
+  const remainingCount = tags.length - MAX_VISIBLE_TAGS;
 
   // Create display data including the "+x" tag if needed
   const getDisplayData = () => {
-    const visibleTags = cleanTags.slice(0, MAX_VISIBLE_TAGS);
+    const visibleTags = tags.slice(0, MAX_VISIBLE_TAGS);
 
     if (hasMoreTags) {
       return [...visibleTags, `+${remainingCount}`];
@@ -37,22 +32,17 @@ const Tags: React.FC<TagsProps> = ({ tags, leadId }) => {
   const displayData = getDisplayData();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.tagsWrapper}>
-        {displayData.map((tag, index) => (
-          <View key={`${leadId}-tag-${index}-${tag}`}>
-            <Tag label={tag} />
-          </View>
-        ))}
-      </View>
+    <View style={styles.tagsWrapper}>
+      {displayData.map((tag, index) => (
+        <View key={`${leadId}-tag-${index}-${tag}`}>
+          <Tag label={tag} />
+        </View>
+      ))}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 24,
-  },
   tagsWrapper: {
     flexDirection: 'row',
     flexWrap: 'wrap',

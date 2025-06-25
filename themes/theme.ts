@@ -10,21 +10,26 @@ export const lightTheme: MD3Theme = {
   ...MD3LightTheme,
   dark: false,
   mode: 'adaptive',
-  roundness: 4,
+  roundness: 6,
   colors: {
     ...MD3LightTheme.colors,
-    primary: '#1976D2',
-    background: '#FFFFFF',
-    surface: '#F8F9FA',
-    backdrop: 'rgba(0,0,0,0.5)',
-    onSurface: '#1A1A1A',
+    primary: '#4A90E2', // Professional blue - trustworthy, modern
+    secondary: '#FF8A65', // Warm coral accent for contrast
+    tertiary: '#7FB3D3', // Lighter blue companion
+    background: '#FEFEFE', // Clean white
+    surface: '#F8FAFC', // Subtle blue-gray tint
+    surfaceVariant: '#EBF3FD', // Light blue tint
+    backdrop: 'rgba(74,144,226,0.4)', // Primary with transparency
+    onSurface: '#1E293B', // Deep slate text
+    onSurfaceVariant: '#475569', // Medium slate
+    outline: '#CBD5E1', // Soft blue-gray outline
     elevation: {
       level0: 'transparent',
-      level1: 'rgba(0,0,0,0.05)',
-      level2: 'rgba(0,0,0,0.08)',
-      level3: 'rgba(0,0,0,0.11)',
-      level4: 'rgba(0,0,0,0.12)',
-      level5: 'rgba(0,0,0,0.14)',
+      level1: 'rgba(74,144,226,0.06)', // Subtle blue shadows
+      level2: 'rgba(74,144,226,0.09)',
+      level3: 'rgba(74,144,226,0.12)',
+      level4: 'rgba(74,144,226,0.14)',
+      level5: 'rgba(74,144,226,0.16)',
     },
   },
   fonts,
@@ -35,21 +40,26 @@ export const darkTheme: MD3Theme = {
   ...MD3DarkTheme,
   dark: true,
   mode: 'adaptive',
-  roundness: 4,
+  roundness: 6,
   colors: {
     ...MD3DarkTheme.colors,
-    primary: '#64B5F6',
-    background: '#121212',
-    surface: '#1E1E1E',
-    backdrop: 'rgba(0,0,0,0.5)',
-    onSurface: '#F5F5F5',
+    primary: '#60A5FA', // Brighter blue for dark mode contrast
+    secondary: '#FFAB91', // Warm peach accent
+    tertiary: '#93C5FD', // Light blue companion
+    background: '#0F172A', // Deep slate background
+    surface: '#1E293B', // Rich dark slate surface
+    surfaceVariant: '#334155', // Medium slate variant
+    backdrop: 'rgba(96,165,250,0.4)', // Primary with transparency
+    onSurface: '#F1F5F9', // Soft light slate text
+    onSurfaceVariant: '#CBD5E1', // Medium light slate
+    outline: '#475569', // Muted slate outline
     elevation: {
       level0: 'transparent',
-      level1: 'rgba(0,0,0,0.15)',
-      level2: 'rgba(0,0,0,0.18)',
-      level3: 'rgba(0,0,0,0.21)',
-      level4: 'rgba(0,0,0,0.22)',
-      level5: 'rgba(0,0,0,0.24)',
+      level1: 'rgba(96,165,250,0.08)', // Subtle blue glow
+      level2: 'rgba(96,165,250,0.12)',
+      level3: 'rgba(96,165,250,0.16)',
+      level4: 'rgba(96,165,250,0.18)',
+      level5: 'rgba(96,165,250,0.20)',
     },
   },
   fonts,

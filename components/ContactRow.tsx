@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { IconButton, Text, useTheme } from 'react-native-paper';
+import { Icon, Text, useTheme } from 'react-native-paper';
 
 export type ContactRowProps = {
   icon: string;
@@ -21,23 +21,27 @@ const ContactRow: React.FC<ContactRowProps> = ({
   return (
     <Pressable
       onPress={onPress}
-      style={styles.contactButton}
+      style={({ pressed }) => [
+        styles.contactButton,
+        pressed && styles.contactButtonPressed,
+      ]}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel || `${icon} ${label}`}
+      android_ripple={{
+        color: theme.colors.primary,
+        borderless: false,
+        radius: 200,
+      }}
     >
       <View style={styles.contactRowContent}>
-        <IconButton
-          icon={icon}
+        <Icon source={icon} size={18} color={theme.colors.primary} />
+        <Text style={styles.contactText} numberOfLines={1} ellipsizeMode="tail">
+          {label}
+        </Text>
+        <Icon
+          source="chevron-right"
           size={16}
-          iconColor={theme.colors.onSurfaceVariant}
-          style={styles.contactIcon}
-        />
-        <Text style={styles.contactText}>{label}</Text>
-        <IconButton
-          icon="chevron-right"
-          size={16}
-          iconColor={theme.colors.onSurfaceVariant}
-          style={styles.chevronIcon}
+          color={theme.colors.onSurfaceVariant}
         />
       </View>
     </Pressable>
@@ -47,29 +51,29 @@ const ContactRow: React.FC<ContactRowProps> = ({
 const createStyles = (theme: any) =>
   StyleSheet.create({
     contactButton: {
-      flex: 1,
-      backgroundColor: theme.colors.surfaceVariant,
+      backgroundColor: theme.colors.surfaceContainerHighest,
       borderRadius: 8,
-      paddingVertical: 4,
-      paddingHorizontal: 8,
+      paddingVertical: 12,
+      paddingHorizontal: 12,
+      minHeight: 44, // Accessibility touch target
+      borderWidth: 1,
+      borderColor: theme.colors.outlineVariant,
+    },
+    contactButtonPressed: {
+      backgroundColor: theme.colors.surfaceContainerHigh,
+      transform: [{ scale: 0.98 }],
     },
     contactRowContent: {
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-between',
-      minHeight: 32,
-    },
-    contactIcon: {
-      margin: 0,
-      marginRight: 4,
+      gap: 12,
     },
     contactText: {
       fontSize: 14,
-      color: theme.colors.onSurfaceVariant,
+      fontWeight: '500',
+      color: theme.colors.onSurface,
       flex: 1,
-    },
-    chevronIcon: {
-      margin: 0,
+      lineHeight: 20,
     },
   });
 

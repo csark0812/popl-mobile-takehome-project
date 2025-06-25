@@ -10,7 +10,9 @@
       "@types/*": ["types/*"],
       "@api/*": ["api/*"],
       "@navigation/*": ["navigation/*"],
-      "@types": ["types/index.ts"]
+      "@utils/*": ["utils/*"],
+      "@types": ["types/index.ts"],
+      "@utils": ["utils/index.ts"]
     }
   }
 }

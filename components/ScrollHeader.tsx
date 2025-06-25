@@ -4,6 +4,8 @@ import React, { useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import Animated, {
+  FadeIn,
+  FadeOut,
   interpolate,
   useAnimatedStyle,
 } from 'react-native-reanimated';
@@ -45,7 +47,12 @@ const ScrollHeader: React.FC<ScrollHeaderProps> = ({
     setHeaderHeight(height);
   };
   return (
-    <Animated.View onLayout={handleLayout} style={animatedStyle}>
+    <Animated.View
+      entering={FadeIn}
+      exiting={FadeOut}
+      onLayout={handleLayout}
+      style={animatedStyle}
+    >
       <Appbar.Header
         style={{
           backgroundColor: 'transparent',

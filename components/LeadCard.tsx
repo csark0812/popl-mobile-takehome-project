@@ -13,8 +13,7 @@ import {
   Text,
   useTheme,
 } from 'react-native-paper';
-import Animated from 'react-native-reanimated';
-import ContactRow from './ContactRow';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import Tags from './Tags';
 
 export type LeadCardProps = Lead;
@@ -36,8 +35,8 @@ const LeadCard: React.FC<LeadCardProps> = ({
 
   // Use the press scale hook
   const { animatedStyle, handlePressIn, handlePressOut } = usePressScale({
-    pressScale: 0.97,
-    duration: 100,
+    pressScale: 0.98,
+    duration: 150,
   });
 
   // Generate avatar initials
@@ -72,6 +71,8 @@ const LeadCard: React.FC<LeadCardProps> = ({
 
   return (
     <AnimatedCard
+      entering={FadeIn}
+      exiting={FadeOut}
       onPress={handlePress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
@@ -80,10 +81,11 @@ const LeadCard: React.FC<LeadCardProps> = ({
       accessibilityHint="Tap to view lead details"
       style={[styles.card, animatedStyle]}
       mode="elevated"
+      elevation={1}
     >
-      {/* Header with Avatar, Name, Title, Company, and Actions */}
-      <View style={styles.header}>
-        <View style={styles.leadInfo}>
+      <Card.Content style={styles.content}>
+        {/* Avatar and Contact Actions Row */}
+        <View style={styles.primarySection}>
           <Avatar.Text
             size={56}
             label={initials}
@@ -91,68 +93,70 @@ const LeadCard: React.FC<LeadCardProps> = ({
             labelStyle={styles.avatarLabel}
           />
 
-          <View style={styles.nameCompanySection}>
-            <Text
-              style={[theme.fonts.titleLarge, styles.name]}
-              numberOfLines={1}
-            >
-              {name}
-            </Text>
-
-            {title && (
-              <Text
-                style={[theme.fonts.bodyMedium, styles.title]}
-                numberOfLines={1}
-              >
-                {title}
-              </Text>
-            )}
-
-            {company && (
-              <View style={styles.companyBadge}>
-                <Text
-                  style={[theme.fonts.labelMedium, styles.companyText]}
-                  numberOfLines={1}
-                >
-                  {company}
-                </Text>
-              </View>
+          {/* Contact Actions */}
+          <View style={styles.contactActions}>
+            <IconButton
+              icon="email"
+              size={18}
+              iconColor={theme.colors.primary}
+              style={styles.contactIcon}
+              onPress={handleEmailPress}
+              accessibilityLabel={`Send email to ${name}`}
+            />
+            {phone && (
+              <IconButton
+                icon="phone"
+                size={18}
+                iconColor={theme.colors.primary}
+                style={styles.contactIcon}
+                onPress={handlePhonePress}
+                accessibilityLabel={`Call ${name}`}
+              />
             )}
           </View>
         </View>
 
-        <IconButton
-          icon="chevron-right"
-          size={20}
-          iconColor={theme.colors.onSurfaceVariant}
-          style={styles.chevron}
-        />
-      </View>
+        {/* Name, Title and Company Row */}
+        <View style={styles.infoSection}>
+          <Text
+            style={[theme.fonts.titleLarge, styles.name]}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {name}
+          </Text>
 
-      {/* Tags Section */}
-      <Tags tags={tags || []} leadId={id} />
+          {title && (
+            <Text
+              style={[theme.fonts.bodyMedium, styles.title]}
+              numberOfLines={2}
+              ellipsizeMode="tail"
+            >
+              {title}
+            </Text>
+          )}
 
-      {/* Divider for visual separation */}
-      <Divider style={styles.divider} />
+          {company && (
+            <Text
+              style={styles.companyText}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              {company}
+            </Text>
+          )}
+        </View>
 
-      {/* Contact Information */}
-      <View style={styles.contactSection}>
-        <ContactRow
-          icon="email"
-          label={email}
-          onPress={handleEmailPress}
-          accessibilityLabel={`Send email to ${name}`}
-        />
-
-        {phone && (
-          <ContactRow
-            icon="phone"
-            label={phone}
-            onPress={handlePhonePress}
-            accessibilityLabel={`Call ${name}`}
-          />
+        {/* Tags Section */}
+        {tags && tags.length > 0 && (
+          <>
+            <Divider style={styles.sectionDivider} />
+            <View style={styles.tagsSection}>
+              <Tags tags={tags} leadId={id} />
+            </View>
+          </>
         )}
-      </View>
+      </Card.Content>
     </AnimatedCard>
   );
 };
@@ -160,76 +164,70 @@ const LeadCard: React.FC<LeadCardProps> = ({
 const createStyles = (theme: any) =>
   StyleSheet.create({
     card: {
-      marginHorizontal: 20,
-      marginVertical: 8,
+      marginHorizontal: 16,
+      marginVertical: 6,
       backgroundColor: theme.colors.surface,
-      borderRadius: 16,
-      elevation: 3,
+      borderRadius: 12,
     },
-    header: {
+    content: {
+      paddingVertical: 12,
+    },
+    primarySection: {
       flexDirection: 'row',
+      alignItems: 'flex-start',
       justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingTop: 24,
-      paddingHorizontal: 24,
-      paddingBottom: 16,
-    },
-    leadInfo: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      flex: 1,
+      marginBottom: 12,
     },
     avatar: {
       backgroundColor: theme.colors.primary,
-      marginRight: 16,
     },
     avatarLabel: {
-      color: 'white',
-      fontWeight: '700',
+      color: theme.colors.onPrimary,
+      fontWeight: '600',
       fontSize: 20,
     },
-    nameCompanySection: {
-      flex: 1,
-      justifyContent: 'center',
+    infoSection: {
+      marginLeft: 4,
     },
     name: {
       color: theme.colors.onSurface,
       fontWeight: '600',
-      marginBottom: 2,
       lineHeight: 28,
+      marginBottom: 4,
+    },
+    metaInfoRow: {
+      marginLeft: 52, // Avatar size (40) + margin (12)
+      marginTop: 4,
     },
     title: {
       color: theme.colors.onSurfaceVariant,
-      marginBottom: 4,
       lineHeight: 20,
-    },
-    companyBadge: {
-      alignSelf: 'flex-start',
-      backgroundColor: theme.colors.secondaryContainer,
-      paddingHorizontal: 8,
-      paddingVertical: 2,
-      borderRadius: 8,
+      marginBottom: 4,
     },
     companyText: {
-      color: theme.colors.onSecondaryContainer,
-      fontWeight: '500',
-      fontSize: 11,
+      fontSize: 12,
+      fontWeight: '600',
+      color: theme.colors.primary,
       textTransform: 'uppercase',
       letterSpacing: 0.5,
+      lineHeight: 16,
     },
-    chevron: {
-      margin: 0,
-    },
-    divider: {
-      marginHorizontal: 24,
+    sectionDivider: {
       marginVertical: 12,
-      backgroundColor: theme.colors.outline,
-      opacity: 0.3,
+      backgroundColor: theme.colors.outlineVariant,
+      opacity: 0.8,
     },
-    contactSection: {
-      paddingHorizontal: 24,
-      paddingBottom: 24,
+    tagsSection: {
+      marginBottom: 4,
+    },
+    contactActions: {
+      flexDirection: 'row',
+      alignItems: 'center',
       gap: 8,
+    },
+    contactIcon: {
+      backgroundColor: `${theme.colors.surfaceVariant}80`, // 50% transparency
+      margin: 0,
     },
   });
 

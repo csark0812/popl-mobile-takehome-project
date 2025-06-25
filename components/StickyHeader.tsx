@@ -1,31 +1,36 @@
-import { useSessionStore } from '@hooks/sessionStore';
 import { useSelectedColorScheme } from '@hooks/useSelectedColorScheme';
 import { useNavigationPageContext } from 'context/NavigationPageContext';
-import React, { useMemo, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import Animated, {
+  FadeIn,
+  FadeOut,
   interpolate,
   useAnimatedStyle,
+  withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { getGreeting } from '../utils';
 import ProgressiveBlurView from './ProgressiveBlurView';
 
 interface StickyHeaderProps {
   scrollY: any;
   renderRight?: () => React.ReactNode;
+  children?: React.ReactNode;
+  style?: ViewStyle;
+  alwaysShow?: boolean;
 }
 
 const StickyHeader: React.FC<StickyHeaderProps> = ({
   scrollY,
   renderRight,
+  children,
+  style,
+  alwaysShow = false,
 }) => {
-  const { navigation, route, options, headerHeight } =
+  const { navigation, route, options, headerHeight, setStickyHeaderHeight } =
     useNavigationPageContext();
-  const name = useSessionStore((s) => s.name);
   const scheme = useSelectedColorScheme();
-  const greeting = useMemo(() => getGreeting(name), [name]);
   const title = options?.title || route?.name;
   const [back] = useState(
     navigation?.canGoBack ? navigation.canGoBack() : false,
@@ -34,16 +39,21 @@ const StickyHeader: React.FC<StickyHeaderProps> = ({
   const { top } = useSafeAreaInsets();
 
   const animatedStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(
-      scrollY.value,
-      [headerHeight - top - 20, headerHeight],
-      [0, 1],
-      'clamp',
-    ),
+    opacity: alwaysShow
+      ? withTiming(1, { duration: 300 })
+      : interpolate(
+          scrollY.value,
+          [headerHeight - top - 20, headerHeight],
+          [0, 1],
+          'clamp',
+        ),
   }));
 
   return (
     <Animated.View
+      onLayout={(e) => {
+        setStickyHeaderHeight(e.nativeEvent.layout.height);
+      }}
       style={[
         {
           position: 'absolute',
@@ -68,20 +78,30 @@ const StickyHeader: React.FC<StickyHeaderProps> = ({
           backgroundColor: 'transparent',
           elevation: 0,
           shadowOpacity: 0,
-          overflow: 'hidden',
         }}
       >
-        {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
-        <View style={styles.contentContainer}>
-          <Appbar.Content title={title} titleStyle={styles.greeting} />
-          {renderRight?.()}
-        </View>
+        <Animated.View
+          entering={FadeIn}
+          exiting={FadeOut}
+          style={[styles.currentContent, style]}
+        >
+          {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
+          <View style={styles.contentContainer}>
+            <Appbar.Content title={title} titleStyle={styles.greeting} />
+            {renderRight?.()}
+          </View>
+        </Animated.View>
+        {children}
       </Appbar.Header>
     </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
+  currentContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   contentContainer: {
     flex: 1,
     flexDirection: 'row',

@@ -19,27 +19,22 @@ const DetailTags: React.FC<DetailTagsProps> = ({
   const theme = useTheme();
   const tagPopoverRef = useRef<AddNewTagPopoverRef>(null);
 
-  // Clean and filter tags
-  const cleanTags =
-    tags?.filter((tag) => tag && tag.trim() !== '').map((tag) => tag.trim()) ||
-    [];
-
   const handleAddTag = useCallback(
     (tag: string) => {
-      if (!cleanTags.includes(tag)) {
+      if (!tags.includes(tag)) {
         onAddTag?.(tag);
       } else {
         Alert.alert('Duplicate Tag', 'This tag already exists for this lead.');
       }
     },
-    [cleanTags, onAddTag],
+    [tags, onAddTag],
   );
 
   const handleRemoveTag = useCallback(
     (index: number) => {
       Alert.alert(
         'Remove Tag',
-        `Are you sure you want to remove "${cleanTags[index]}"?`,
+        `Are you sure you want to remove "${tags[index]}"?`,
         [
           { text: 'Cancel', style: 'cancel' },
           {
@@ -50,7 +45,7 @@ const DetailTags: React.FC<DetailTagsProps> = ({
         ],
       );
     },
-    [cleanTags, onRemoveTag],
+    [tags, onRemoveTag],
   );
 
   const showAddTagPopover = () => {
@@ -60,7 +55,7 @@ const DetailTags: React.FC<DetailTagsProps> = ({
   return (
     <View style={styles.container}>
       <View style={styles.tagsWrapper}>
-        {cleanTags.map((tag, index) => (
+        {tags.map((tag, index) => (
           <Surface
             key={`${leadId}-tag-${index}`}
             style={[
