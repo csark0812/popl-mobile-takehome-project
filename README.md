@@ -78,6 +78,7 @@ This project implements the Popl lead management flow as specified in the take-h
    - Unit tests in [`tests/`](./tests/) covering components, hooks, and utilities
    - Jest configuration for React Native environment
    - Run all tests with `npm run test`
+   - Unit tests cover API utilities, custom hooks, all major components, screens, context, theming, and utility functions—ensuring correct rendering, behavior, and error handling.
 
 5. **🎨 Theme Toggle**
 
