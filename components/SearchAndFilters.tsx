@@ -140,7 +140,7 @@ const createStyles = (theme: any) =>
     searchContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 4,
+      gap: 8,
     },
     searchbar: {
       flex: 1,

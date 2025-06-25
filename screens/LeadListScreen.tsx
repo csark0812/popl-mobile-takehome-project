@@ -14,6 +14,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useNavigationPageContext } from 'context/NavigationPageContext';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Appbar, FAB, List } from 'react-native-paper';
 import Animated, {
   FadeInDown,
@@ -22,6 +23,7 @@ import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
 } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'LeadList'>;
 
@@ -34,7 +36,7 @@ export default function LeadListScreen({ navigation }: Props) {
   const [searchValue, setSearchValue] = useState('');
   const [filters, setFilters] = useState<FilterState>({ sortBy: 'name' });
   const [isSearchActive, setIsSearchActive] = useState(false);
-
+  const { bottom } = useSafeAreaInsets();
   const scrollY = useSharedValue(0);
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -174,6 +176,15 @@ export default function LeadListScreen({ navigation }: Props) {
         )}
       </StickyHeader>
       <Animated.FlatList
+        renderScrollComponent={(props) => (
+          <KeyboardAwareScrollView
+            {...props}
+            contentContainerStyle={[
+              { paddingBottom: bottom },
+              props.contentContainerStyle,
+            ]}
+          />
+        )}
         data={filteredAndSortedLeads}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <LeadCard {...item} />}
@@ -182,27 +193,38 @@ export default function LeadListScreen({ navigation }: Props) {
           .stiffness(200)}
         ListHeaderComponent={
           !isSearchActive ? (
-            <>
-              <ScrollHeader
-                scrollY={scrollY}
-                renderRight={() => (
-                  <Appbar.Action
-                    icon="cog"
-                    onPress={() => settingsPopoverRef.current?.show()}
-                    accessibilityLabel="Settings"
-                    size={20}
-                    style={{ margin: 0 }}
-                  />
-                )}
-              />
-              <SearchAndFilters
-                searchValue={searchValue}
-                onFocus={() => setIsSearchActive(true)}
-                onSearchChangeText={setSearchValue}
-                filters={filters}
-                onFiltersChange={setFilters}
-              />
-            </>
+            <ScrollHeader
+              scrollY={scrollY}
+              renderRight={() => (
+                <Appbar.Action
+                  icon="cog"
+                  onPress={() => settingsPopoverRef.current?.show()}
+                  accessibilityLabel="Settings"
+                  size={20}
+                  style={{ margin: 0 }}
+                />
+              )}
+            >
+              <View
+                style={{
+                  flex: 1,
+                  elevation: 2,
+                  shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 1 },
+                  shadowOpacity: 0.15,
+                  shadowRadius: 2,
+                  paddingBottom: 8,
+                }}
+              >
+                <SearchAndFilters
+                  searchValue={searchValue}
+                  onFocus={() => setIsSearchActive(true)}
+                  onSearchChangeText={setSearchValue}
+                  filters={filters}
+                  onFiltersChange={setFilters}
+                />
+              </View>
+            </ScrollHeader>
           ) : (
             <Animated.View style={{ height: stickyHeaderHeight }} />
           )

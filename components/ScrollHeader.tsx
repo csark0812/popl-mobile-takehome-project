@@ -15,11 +15,13 @@ import { getGreeting } from '../utils';
 interface ScrollHeaderProps {
   scrollY: any;
   renderRight?: () => React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const ScrollHeader: React.FC<ScrollHeaderProps> = ({
   scrollY,
   renderRight,
+  children,
 }) => {
   const { navigation, route, options, setHeaderHeight, headerHeight } =
     useNavigationPageContext();
@@ -47,33 +49,30 @@ const ScrollHeader: React.FC<ScrollHeaderProps> = ({
     setHeaderHeight(height);
   };
   return (
-    <Animated.View
-      entering={FadeIn}
-      exiting={FadeOut}
-      onLayout={handleLayout}
-      style={animatedStyle}
-    >
-      <Appbar.Header
-        style={{
-          backgroundColor: 'transparent',
-          elevation: 0,
-          shadowOpacity: 0,
-          borderRadius: 20,
-          overflow: 'hidden',
-        }}
-      >
-        {back ? (
-          <Appbar.BackAction size={20} onPress={navigation.goBack} />
-        ) : null}
-        <View style={styles.contentContainer}>
-          <Appbar.Content
-            title={route?.name === 'LeadList' ? greeting : title}
-            titleStyle={styles.greeting}
-          />
+    <Animated.View entering={FadeIn} exiting={FadeOut}>
+      <Animated.View onLayout={handleLayout} style={animatedStyle}>
+        <Appbar.Header
+          style={{
+            backgroundColor: 'transparent',
+            elevation: 0,
+            shadowOpacity: 0,
+            overflow: 'hidden',
+          }}
+        >
+          {back ? (
+            <Appbar.BackAction size={20} onPress={navigation.goBack} />
+          ) : null}
+          <View style={styles.contentContainer}>
+            <Appbar.Content
+              title={route?.name === 'LeadList' ? greeting : title}
+              titleStyle={styles.greeting}
+            />
 
-          {renderRight?.()}
-        </View>
-      </Appbar.Header>
+            {renderRight?.()}
+          </View>
+        </Appbar.Header>
+        {children}
+      </Animated.View>
     </Animated.View>
   );
 };
@@ -85,7 +84,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingRight: 16,
     paddingLeft: 16,
-    minHeight: 56,
   },
   greeting: {
     fontSize: 26,

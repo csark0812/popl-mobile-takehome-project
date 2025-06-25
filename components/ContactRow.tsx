@@ -1,79 +1,100 @@
 import React, { memo } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
-import { Icon, Text, useTheme } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Icon, IconButton, Text, useTheme } from 'react-native-paper';
 
 export type ContactRowProps = {
   icon: string;
   label: string;
+  value: string;
   onPress: () => void;
+  onCopy?: () => void;
   accessibilityLabel?: string;
 };
 
 const ContactRow: React.FC<ContactRowProps> = ({
   icon,
   label,
+  value,
   onPress,
+  onCopy,
   accessibilityLabel,
 }) => {
   const theme = useTheme();
   const styles = createStyles(theme);
 
   return (
-    <Pressable
-      onPress={onPress}
-      style={({ pressed }) => [
-        styles.contactButton,
-        pressed && styles.contactButtonPressed,
-      ]}
-      accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel || `${icon} ${label}`}
-      android_ripple={{
-        color: theme.colors.primary,
-        borderless: false,
-        radius: 200,
-      }}
-    >
-      <View style={styles.contactRowContent}>
-        <Icon source={icon} size={18} color={theme.colors.primary} />
-        <Text style={styles.contactText} numberOfLines={1} ellipsizeMode="tail">
-          {label}
-        </Text>
-        <Icon
-          source="chevron-right"
-          size={16}
-          color={theme.colors.onSurfaceVariant}
-        />
+    <View style={styles.contactButton}>
+      <View style={styles.touchable}>
+        <View style={styles.contactRowContent}>
+          <Icon source={icon} size={18} color={theme.colors.primary} />
+          <View style={styles.textContainer}>
+            <Text
+              style={styles.labelText}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              {label}
+            </Text>
+            <Text
+              style={styles.valueText}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              {value}
+            </Text>
+          </View>
+          {onCopy && (
+            <IconButton
+              icon="content-copy"
+              size={16}
+              onPress={onCopy}
+              accessibilityLabel={`Copy ${label}`}
+              style={styles.copyButton}
+              iconColor={theme.colors.primary}
+            />
+          )}
+        </View>
       </View>
-    </Pressable>
+    </View>
   );
 };
 
 const createStyles = (theme: any) =>
   StyleSheet.create({
     contactButton: {
-      backgroundColor: theme.colors.surfaceContainerHighest,
       borderRadius: 8,
+      overflow: 'hidden' as const,
+    },
+    touchable: {
       paddingVertical: 12,
       paddingHorizontal: 12,
       minHeight: 44, // Accessibility touch target
-      borderWidth: 1,
-      borderColor: theme.colors.outlineVariant,
-    },
-    contactButtonPressed: {
-      backgroundColor: theme.colors.surfaceContainerHigh,
-      transform: [{ scale: 0.98 }],
     },
     contactRowContent: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: 'row' as const,
+      alignItems: 'center' as const,
       gap: 12,
     },
-    contactText: {
-      fontSize: 14,
-      fontWeight: '500',
-      color: theme.colors.onSurface,
+    textContainer: {
       flex: 1,
+    },
+    labelText: {
+      ...theme.fonts.labelSmall,
+      fontWeight: '600',
+      color: theme.colors.onSurfaceVariant,
+      textTransform: 'uppercase',
+      lineHeight: 16,
+    },
+    valueText: {
+      fontSize: 14,
+      fontWeight: '600' as const,
+      color: theme.colors.onSurface,
       lineHeight: 20,
+      marginTop: 2,
+    },
+    copyButton: {
+      margin: 0,
+      backgroundColor: '#E3F2FD', // Light blue background
     },
   });
 

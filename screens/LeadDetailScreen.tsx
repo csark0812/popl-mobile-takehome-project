@@ -1,6 +1,8 @@
+import AboutThisLead from '@components/AboutThisLead';
 import ActionButtons from '@components/ActionButtons';
+import ContactInformation from '@components/ContactInformation';
+import DetailBottomActions from '@components/DetailBottomActions';
 import DetailsHeroSection from '@components/DetailsHeroSection';
-import DetailTagsSection from '@components/DetailTagsSection';
 import ScrollHeader from '@components/ScrollHeader';
 import StickyHeader from '@components/StickyHeader';
 import { useLead } from '@hooks/api';
@@ -12,18 +14,16 @@ import {
   Dimensions,
   Linking,
   RefreshControl,
-  ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
   ActivityIndicator,
   Button,
   Card,
-  Divider,
   FAB,
   IconButton,
-  List,
   Surface,
   Text,
   useTheme,
@@ -79,6 +79,23 @@ export default function LeadDetailScreen({ route, navigation }: Props) {
 
   const handleAddNote = useCallback(() => {
     Alert.alert('Add Note', 'Note functionality would open note editor');
+  }, []);
+
+  const handleDeleteLead = useCallback(() => {
+    Alert.alert(
+      'Delete Lead',
+      'Are you sure you want to delete this lead? This action cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            Alert.alert('Delete Lead', 'Lead would be deleted from the system');
+          },
+        },
+      ],
+    );
   }, []);
 
   // Tag handlers
@@ -206,7 +223,8 @@ export default function LeadDetailScreen({ route, navigation }: Props) {
     >
       <StickyHeader scrollY={scrollY} renderRight={renderHeaderActions} />
 
-      <ScrollView
+      <KeyboardAwareScrollView
+        keyboardShouldPersistTaps="handled"
         style={styles.scrollView}
         contentContainerStyle={[{ paddingBottom: bottom + 80 }]}
         onScroll={handleScroll}
@@ -222,126 +240,31 @@ export default function LeadDetailScreen({ route, navigation }: Props) {
       >
         <ScrollHeader scrollY={scrollY} renderRight={renderHeaderActions} />
 
-        {/* Hero Section */}
-        <DetailsHeroSection lead={lead} style={{ marginHorizontal: 16 }} />
+        <View style={{ paddingHorizontal: 16 }}>
+          {/* Hero Section */}
+          <DetailsHeroSection lead={lead} />
 
-        {/* Quick Actions */}
-        <ActionButtons lead={lead} />
+          {/* Quick Actions */}
+          <ActionButtons lead={lead} />
 
-        {/* Tags Section */}
-        <DetailTagsSection
-          tags={lead.tags}
-          leadId={lead.id}
-          onAddTag={handleAddTag}
-          onRemoveTag={handleRemoveTag}
-        />
+          {/* About This Lead Section */}
+          <AboutThisLead
+            lead={lead}
+            onAddTag={handleAddTag}
+            onRemoveTag={handleRemoveTag}
+            onAddNote={handleAddNote}
+          />
 
-        {/* Contact Information */}
-        <Card style={styles.card} mode="outlined">
-          <Card.Content>
-            <Text style={[theme.fonts.titleMedium, styles.sectionTitle]}>
-              Contact Information
-            </Text>
-            <List.Item
-              title="Email"
-              description={lead.email}
-              left={(props) => <List.Icon {...props} icon="email" />}
-              right={(props) => (
-                <IconButton {...props} icon="content-copy" onPress={() => {}} />
-              )}
-            />
-            {lead.phone && (
-              <>
-                <Divider />
-                <List.Item
-                  title="Phone"
-                  description={lead.phone}
-                  left={(props) => <List.Icon {...props} icon="phone" />}
-                  right={(props) => (
-                    <IconButton
-                      {...props}
-                      icon="content-copy"
-                      onPress={() => {}}
-                    />
-                  )}
-                />
-              </>
-            )}
-          </Card.Content>
-        </Card>
+          {/* Contact Information */}
+          <ContactInformation lead={lead} />
 
-        {/* Notes Section */}
-        <Card style={styles.card} mode="outlined">
-          <Card.Content>
-            <Text style={[theme.fonts.titleMedium, styles.sectionTitle]}>
-              Notes
-            </Text>
-            {lead.notes ? (
-              <Text
-                style={[
-                  theme.fonts.bodyMedium,
-                  { color: theme.colors.onSurface },
-                ]}
-              >
-                {lead.notes}
-              </Text>
-            ) : (
-              <View style={styles.emptyState}>
-                <Text
-                  style={[
-                    theme.fonts.bodyMedium,
-                    {
-                      color: theme.colors.onSurfaceVariant,
-                      textAlign: 'center',
-                    },
-                  ]}
-                >
-                  No notes added yet
-                </Text>
-                <Button
-                  mode="outlined"
-                  icon="note-plus"
-                  onPress={handleAddNote}
-                  style={{ marginTop: 12 }}
-                >
-                  Add Note
-                </Button>
-              </View>
-            )}
-          </Card.Content>
-        </Card>
-
-        {/* Activity Timeline Placeholder */}
-        <Card style={styles.card} mode="outlined">
-          <Card.Content>
-            <Text style={[theme.fonts.titleMedium, styles.sectionTitle]}>
-              Recent Activity
-            </Text>
-            <View style={styles.emptyState}>
-              <Text
-                style={[
-                  theme.fonts.bodyMedium,
-                  { color: theme.colors.onSurfaceVariant, textAlign: 'center' },
-                ]}
-              >
-                No recent activity
-              </Text>
-              <Text
-                style={[
-                  theme.fonts.bodySmall,
-                  {
-                    color: theme.colors.onSurfaceVariant,
-                    textAlign: 'center',
-                    marginTop: 8,
-                  },
-                ]}
-              >
-                Activities like calls, emails, and meetings will appear here
-              </Text>
-            </View>
-          </Card.Content>
-        </Card>
-      </ScrollView>
+          {/* Bottom Actions */}
+          <DetailBottomActions
+            onEditLead={handleEdit}
+            onDeleteLead={handleDeleteLead}
+          />
+        </View>
+      </KeyboardAwareScrollView>
 
       {/* Floating Action Button */}
       <FAB
