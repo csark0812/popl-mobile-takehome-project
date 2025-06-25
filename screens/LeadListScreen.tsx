@@ -276,7 +276,7 @@ export default function LeadListScreen({ navigation }: Props) {
           <KeyboardAwareScrollView
             {...props}
             contentContainerStyle={[
-              { paddingBottom: bottom },
+              { paddingBottom: bottom + 80 },
               props.contentContainerStyle,
             ]}
           />
