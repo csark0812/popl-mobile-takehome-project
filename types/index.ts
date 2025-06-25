@@ -8,6 +8,7 @@ export interface Lead {
   tags?: string[]; // Optional array of tags
   notes?: string | null; // Optional, can be null
   createdAt?: string; // Optional ISO date string
+  image?: string | null; // Optional image URL or path
 }
 
 export interface Session {

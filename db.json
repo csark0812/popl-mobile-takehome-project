@@ -4,6 +4,13 @@
     "description": "Enter the details for this lead contact",
     "fields": [
       {
+        "name": "image",
+        "label": "Lead Image",
+        "type": "image",
+        "required": false,
+        "placeholder": "Upload or paste image URL"
+      },
+      {
         "name": "name",
         "label": "Full Name",
         "type": "text",
@@ -96,7 +103,8 @@
       "phone": "+1 (555) 123-4567",
       "tags": ["enterprise", "tech", "high-priority"],
       "notes": "Interested in enterprise solution",
-      "createdAt": "2024-03-15T08:30:00Z"
+      "createdAt": "2024-03-15T08:30:00Z",
+      "image": "https://randomuser.me/api/portraits/men/1.jpg"
     },
     {
       "id": "550e8400-e29b-41d4-a716-446655440000",
@@ -107,7 +115,8 @@
       "phone": "+1 (555) 987-6543",
       "tags": ["startup", "referral"],
       "notes": "Startup looking for scalable solutions",
-      "createdAt": "2024-03-18T10:20:00Z"
+      "createdAt": "2024-03-18T10:20:00Z",
+      "image": "https://randomuser.me/api/portraits/women/2.jpg"
     },
     {
       "id": "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
@@ -118,7 +127,8 @@
       "phone": "+1 (555) 234-5678",
       "tags": ["enterprise", "sales"],
       "notes": "Follow up needed on pricing discussion",
-      "createdAt": "2024-03-10T09:15:00Z"
+      "createdAt": "2024-03-10T09:15:00Z",
+      "image": "https://randomuser.me/api/portraits/men/3.jpg"
     },
     {
       "id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
@@ -129,7 +139,8 @@
       "phone": "+1 (555) 345-6789",
       "tags": ["operations", "mid-market"],
       "notes": "Met at TechConf 2024",
-      "createdAt": "2024-03-05T15:45:00Z"
+      "createdAt": "2024-03-05T15:45:00Z",
+      "image": "https://randomuser.me/api/portraits/women/4.jpg"
     },
     {
       "id": "9b4f8d7e-6c5b-4a3d-2n1m-8p7q6r5s4t3u",
@@ -140,7 +151,8 @@
       "phone": "+1 (555) 567-8901",
       "tags": ["product", "mobile"],
       "notes": "Interested in mobile solutions",
-      "createdAt": "2024-03-12T13:30:00Z"
+      "createdAt": "2024-03-12T13:30:00Z",
+      "image": "https://randomuser.me/api/portraits/women/5.jpg"
     },
     {
       "id": "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6",
@@ -151,7 +163,8 @@
       "phone": "+1 (555) 678-9012",
       "tags": ["enterprise"],
       "notes": "Looking for educational integration",
-      "createdAt": "2024-03-08T16:20:00Z"
+      "createdAt": "2024-03-08T16:20:00Z",
+      "image": "https://randomuser.me/api/portraits/men/6.jpg"
     },
     {
       "id": "b2c3d4e5-f6g7-8h9i-0j1k-l2m3n4o5p6q7",
@@ -162,7 +175,8 @@
       "phone": "+1 (555) 789-0123",
       "tags": ["marketing", "analytics"],
       "notes": "Interested in analytics features",
-      "createdAt": "2024-03-20T09:00:00Z"
+      "createdAt": "2024-03-20T09:00:00Z",
+      "image": "https://randomuser.me/api/portraits/women/7.jpg"
     },
     {
       "id": "c3d4e5f6-g7h8-9i0j-1k2l-m3n4o5p6q7r8",
@@ -170,7 +184,8 @@
       "email": "messy.data@mixed-case.com",
       "tags": ["TEST", "test"],
       "notes": "Test",
-      "createdAt": "2025-06-25T10:24:34.094Z"
+      "createdAt": "2025-06-25T10:24:34.094Z",
+      "image": "https://randomuser.me/api/portraits/men/8.jpg"
     },
     {
       "id": "d4e5f6g7-h8i9-0j1k-2l3m-n4o5p6q7r8s9",
@@ -189,12 +204,14 @@
         "international"
       ],
       "notes": "Initial meeting conducted on March 15th with the following attendees: John (CEO), Sarah (CTO), Mike (CFO), and entire board of directors. Client expressed strong interest in our enterprise solution, particularly the advanced analytics module. Key points discussed:\n\n1. Need for seamless integration with their legacy systems (SAP, Oracle, custom in-house solutions)\n2. Compliance requirements: SOC2, GDPR, CCPA, ISO27001\n3. Custom reporting requirements for 15 different departments\n4. Multi-language support needed for 12 regional offices\n5. Complex approval workflow with 7 stages\n\nBudget range: $500k-$1M\nTimeline: Must go live before Q4\n\nFollow-up tasks:\n- Schedule technical deep dive\n- Prepare custom demo for board\n- Draft preliminary project timeline\n- Coordinate with legal for compliance review\n- Engage solution architects for infrastructure planning\n\nRisks:\n* Complex organizational structure\n* Multiple decision makers\n* Tight deadline\n* Legacy system constraints",
-      "createdAt": "2024-03-01T00:00:00Z"
+      "createdAt": "2024-03-01T00:00:00Z",
+      "image": "https://randomuser.me/api/portraits/men/9.jpg"
     },
     {
       "id": "cf4a",
       "name": "Test",
-      "email": "Email.com"
+      "email": "Email.com",
+      "image": "https://randomuser.me/api/portraits/men/10.jpg"
     }
   ]
 }

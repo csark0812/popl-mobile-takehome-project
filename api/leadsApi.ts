@@ -5,7 +5,7 @@ import { Lead } from '@types';
 export interface FormFieldConfig {
   name: keyof Lead;
   label: string;
-  type: 'text' | 'email' | 'tel' | 'textarea' | 'tags';
+  type: 'text' | 'email' | 'tel' | 'textarea' | 'tags' | 'image';
   required: boolean;
   placeholder?: string;
   validation?: {

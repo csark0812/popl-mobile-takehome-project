@@ -55,7 +55,7 @@ export default function RootNavigator() {
             <Stack.Screen
               name="NewLead"
               component={NewLeadScreen}
-              options={{ title: 'New Lead', presentation: 'formSheet' }}
+              options={{ title: 'New Lead', presentation: 'modal' }}
             />
           </>
         )}

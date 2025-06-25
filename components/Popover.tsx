@@ -5,7 +5,14 @@ import React, {
   useImperativeHandle,
   useState,
 } from 'react';
-import { Dimensions, Pressable, StyleSheet, ViewStyle } from 'react-native';
+import {
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  StyleSheet,
+  ViewStyle,
+} from 'react-native';
 import { Modal, Portal, Surface, useTheme } from 'react-native-paper';
 import Animated, {
   Easing,
@@ -30,6 +37,8 @@ interface PopoverProps {
   maxWidth?: number;
   elevation?: 0 | 1 | 2 | 3 | 4 | 5;
 }
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const Popover = forwardRef<PopoverRef, PopoverProps>(
   (
@@ -79,48 +88,55 @@ const Popover = forwardRef<PopoverRef, PopoverProps>(
       opacity: interpolate(scale.value, [0.85, 1], [0, 1]),
     }));
 
+    // Animate the opacity of the Surface itself
+    const animatedSurfaceStyle = useAnimatedStyle(() => ({
+      opacity: interpolate(scale.value, [0.85, 1], [0, 1]),
+    }));
+
     return (
       <Portal>
         <Modal
           visible={visible}
           onDismiss={hideModal}
           style={{ marginTop: 0, marginBottom: 0 }}
-          contentContainerStyle={styles.modalContainer}
+          contentContainerStyle={[styles.modalContainer]}
         >
-          <Pressable style={StyleSheet.absoluteFillObject} onPress={hideModal}>
-            <Animated.View
-              style={[
-                StyleSheet.absoluteFillObject,
-                {
-                  backgroundColor: theme.dark
-                    ? 'rgba(0, 0, 0, 0.8)'
-                    : 'rgba(0, 0, 0, 0.5)',
-                },
-              ]}
-            />
-            <BlurView
-              intensity={20}
-              tint={theme.dark ? 'light' : 'dark'}
-              style={StyleSheet.absoluteFillObject}
-            />
-          </Pressable>
-          <Pressable
-            style={[styles.popoverContainer, { maxWidth }, containerStyle]}
-            onPress={(e) => e.stopPropagation()}
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={{ flex: 1, width: '100%' }}
+            enabled
           >
-            <Animated.View style={animatedModalStyle}>
-              <Surface
-                style={[
-                  styles.surface,
-                  { backgroundColor: theme.colors.surface },
-                  surfaceStyle,
-                ]}
-                elevation={elevation}
-              >
-                {children}
-              </Surface>
-            </Animated.View>
-          </Pressable>
+            <AnimatedPressable
+              style={StyleSheet.absoluteFillObject}
+              onPress={hideModal}
+            >
+              <BlurView
+                intensity={20}
+                tint={'dark'}
+                style={StyleSheet.absoluteFillObject}
+              />
+            </AnimatedPressable>
+            <Pressable
+              style={[styles.popoverContainer, { maxWidth }, containerStyle]}
+              onPress={(e) => e.stopPropagation()}
+            >
+              <Animated.View style={animatedModalStyle}>
+                <Animated.View style={animatedSurfaceStyle}>
+                  <Surface
+                    style={[
+                      styles.surface,
+                      // Use RGBA for backgroundColor to support opacity
+                      { backgroundColor: theme.colors.surface + 'E6' }, // E6 = ~90% opacity
+                      surfaceStyle,
+                    ]}
+                    elevation={elevation}
+                  >
+                    {children}
+                  </Surface>
+                </Animated.View>
+              </Animated.View>
+            </Pressable>
+          </KeyboardAvoidingView>
         </Modal>
       </Portal>
     );
@@ -141,7 +157,6 @@ const styles = StyleSheet.create({
   surface: {
     borderRadius: 24,
     padding: 0,
-    overflow: 'hidden',
   },
 });
 
