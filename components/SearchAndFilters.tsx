@@ -17,6 +17,7 @@ interface SearchAndFiltersProps {
   onFocus?: () => void;
   onBlur?: () => void;
   onClearIconPress?: () => void;
+  showBlurButton?: boolean;
 }
 
 export interface SearchAndFiltersRef {
@@ -33,6 +34,7 @@ const SearchAndFilters = forwardRef<SearchAndFiltersRef, SearchAndFiltersProps>(
       onFocus,
       onBlur,
       onClearIconPress,
+      showBlurButton = false,
     },
     ref,
   ) => {
@@ -77,6 +79,11 @@ const SearchAndFilters = forwardRef<SearchAndFiltersRef, SearchAndFiltersProps>(
       filterPopoverRef.current?.show();
     };
 
+    const handleBlurButtonPress = () => {
+      Keyboard.dismiss();
+      searchbarRef.current?.blur();
+    };
+
     const handleFilterDismiss = () => {
       if (shouldRefocusAfterFilter) {
         setTimeout(() => {
@@ -110,14 +117,25 @@ const SearchAndFilters = forwardRef<SearchAndFiltersRef, SearchAndFiltersProps>(
             onClearIconPress={onClearIconPress}
           />
           <IconButton
-            icon="tune"
+            icon="sort"
             size={24}
             iconColor={theme.colors.onSurfaceVariant}
             style={styles.filterButton}
             onPress={handleFilterPress}
-            accessibilityLabel="Open filters"
+            accessibilityLabel="Open sort options"
             accessibilityHint="Tap to change sorting options"
           />
+          {showBlurButton && (
+            <IconButton
+              icon="close"
+              size={24}
+              iconColor={theme.colors.onSurfaceVariant}
+              style={styles.filterButton}
+              onPress={handleBlurButtonPress}
+              accessibilityLabel="Close search"
+              accessibilityHint="Tap to close search input"
+            />
+          )}
         </View>
 
         <FilterPopover

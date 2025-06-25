@@ -11,11 +11,18 @@ import SettingsPopover, {
 } from '@components/SettingsPopover';
 import StickyHeader from '@components/StickyHeader';
 import { useLeads } from '@hooks/api';
+import { useDebounce } from '@hooks/useDebounce';
 import { RootStackParamList } from '@navigation/index';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useNavigationPageContext } from 'context/NavigationPageContext';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { RefreshControl, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { FAB, List, useTheme } from 'react-native-paper';
 import Animated, {
@@ -30,15 +37,20 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 type Props = NativeStackScreenProps<RootStackParamList, 'LeadList'>;
 
 export default function LeadListScreen({ navigation }: Props) {
-  const { data: leads, isLoading, isError } = useLeads();
+  const { data: leads, isLoading, isError, refetch, isRefetching } = useLeads();
+  const theme = useTheme();
+
   const settingsPopoverRef = useRef<SettingsPopoverRef>(null);
   const searchAndFiltersRef = useRef<SearchAndFiltersRef>(null);
   const { stickyHeaderHeight } = useNavigationPageContext();
-  const theme = useTheme();
   // Search and filter state
   const [searchValue, setSearchValue] = useState('');
   const [filters, setFilters] = useState<FilterState>({ sortBy: 'name' });
   const [isSearchActive, setIsSearchActive] = useState(false);
+
+  // Debounce search value to improve performance
+  const debouncedSearchValue = useDebounce(searchValue, 300);
+
   const { bottom } = useSafeAreaInsets();
   const scrollY = useSharedValue(0);
   const scrollHandler = useAnimatedScrollHandler({
@@ -46,6 +58,11 @@ export default function LeadListScreen({ navigation }: Props) {
       scrollY.value = event.contentOffset.y;
     },
   });
+
+  // Handle pull-to-refresh
+  const onRefresh = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
   // Focus search input when search becomes active
   useEffect(() => {
@@ -64,14 +81,16 @@ export default function LeadListScreen({ navigation }: Props) {
     let filtered = leads;
 
     // Apply search filter
-    if (searchValue.trim()) {
-      const searchLower = searchValue.toLowerCase().trim();
+    if (debouncedSearchValue.trim()) {
+      const searchLower = debouncedSearchValue.toLowerCase().trim();
       filtered = filtered.filter(
         (lead) =>
           lead.name.toLowerCase().includes(searchLower) ||
           lead.email.toLowerCase().includes(searchLower) ||
           (lead.company && lead.company.toLowerCase().includes(searchLower)) ||
-          (lead.title && lead.title.toLowerCase().includes(searchLower)),
+          (lead.title && lead.title.toLowerCase().includes(searchLower)) ||
+          (lead.tags &&
+            lead.tags.some((tag) => tag.toLowerCase().includes(searchLower))),
       );
     }
 
@@ -89,7 +108,7 @@ export default function LeadListScreen({ navigation }: Props) {
     });
 
     return filtered;
-  }, [leads, searchValue, filters]);
+  }, [leads, debouncedSearchValue, filters]);
 
   if (isLoading) {
     return (
@@ -104,7 +123,7 @@ export default function LeadListScreen({ navigation }: Props) {
               type="light"
             />
           )}
-        ></ScrollHeader>
+        />
         <View style={{ paddingTop: 20 }}>
           {Array.from({ length: 5 }).map((_, index) => (
             <LeadCardSkeleton key={`skeleton-${index}`} />
@@ -116,21 +135,82 @@ export default function LeadListScreen({ navigation }: Props) {
 
   if (isError) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <List.Item title="Error loading leads" />
+      <View style={{ flex: 1 }}>
+        <ScrollHeader
+          scrollY={scrollY}
+          renderRight={() => (
+            <ActionBarIcon
+              icon="cog"
+              onPress={() => settingsPopoverRef.current?.show()}
+              accessibilityLabel="Settings"
+              type="light"
+            />
+          )}
+        />
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingHorizontal: 24,
+          }}
+        >
+          <List.Item
+            title="Error loading leads"
+            description="Unable to load your leads. Please check your connection and try again."
+            titleStyle={{ textAlign: 'center' }}
+            descriptionStyle={{ textAlign: 'center' }}
+          />
+          <FAB
+            icon="refresh"
+            onPress={() => refetch()}
+            style={{ marginTop: 16 }}
+            label="Try Again"
+          />
+        </View>
+        <SettingsPopover ref={settingsPopoverRef} />
       </View>
     );
   }
 
   if (!leads || leads.length === 0) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <List.Item title="No leads found" />
-        <FAB
-          icon="plus"
-          onPress={() => navigation.navigate('NewLead')}
-          style={{ position: 'absolute', right: 24, bottom: 40 }}
+      <View style={{ flex: 1 }}>
+        <ScrollHeader
+          scrollY={scrollY}
+          renderRight={() => (
+            <ActionBarIcon
+              icon="cog"
+              onPress={() => settingsPopoverRef.current?.show()}
+              accessibilityLabel="Settings"
+              type="light"
+            />
+          )}
         />
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingHorizontal: 24,
+          }}
+        >
+          <List.Item
+            title="No leads yet"
+            description="Get started by creating your first lead to begin tracking your sales opportunities."
+            titleStyle={{ textAlign: 'center' }}
+            descriptionStyle={{ textAlign: 'center' }}
+          />
+          <FAB
+            icon="plus"
+            onPress={() => navigation.navigate('NewLead')}
+            style={{
+              marginTop: 16,
+            }}
+            label="Create Lead"
+          />
+        </View>
+        <SettingsPopover ref={settingsPopoverRef} />
       </View>
     );
   }
@@ -173,6 +253,7 @@ export default function LeadListScreen({ navigation }: Props) {
             }}
           >
             <SearchAndFilters
+              showBlurButton={true}
               ref={searchAndFiltersRef}
               searchValue={searchValue}
               onSearchChangeText={setSearchValue}
@@ -206,6 +287,26 @@ export default function LeadListScreen({ navigation }: Props) {
         itemLayoutAnimation={LinearTransition.springify()
           .damping(80)
           .stiffness(200)}
+        ListEmptyComponent={
+          <View
+            style={{
+              paddingVertical: 48,
+              paddingHorizontal: 24,
+              alignItems: 'center',
+            }}
+          >
+            <List.Item
+              title="No leads found"
+              description={
+                debouncedSearchValue.trim()
+                  ? `No leads match "${debouncedSearchValue.trim()}"`
+                  : 'No leads match your current filters'
+              }
+              titleStyle={{ textAlign: 'center' }}
+              descriptionStyle={{ textAlign: 'center' }}
+            />
+          </View>
+        }
         ListHeaderComponent={
           !isSearchActive ? (
             <ScrollHeader
@@ -245,6 +346,14 @@ export default function LeadListScreen({ navigation }: Props) {
         }
         onScroll={scrollHandler}
         scrollEventThrottle={16}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefetching}
+            onRefresh={onRefresh}
+            tintColor={theme.colors.onBackground}
+            colors={[theme.colors.primary]}
+          />
+        }
       />
 
       <FAB

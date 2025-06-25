@@ -87,8 +87,11 @@ describe('Hooks', () => {
       act(() => {
         result.current.setValue('name', '');
       });
-      const errors = result.current.validateForm();
-      expect(errors.name).toBeDefined();
+      let errors: Record<string, string>;
+      act(() => {
+        errors = result.current.validateForm();
+      });
+      expect(errors!.name).toBeDefined();
     });
   });
 

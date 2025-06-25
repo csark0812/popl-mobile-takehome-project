@@ -26,7 +26,13 @@ type Props = NativeStackScreenProps<RootStackParamList, 'NewLead'>;
 export default function NewLeadScreen({ navigation }: Props) {
   const theme = useTheme();
   const { stickyHeaderHeight } = useNavigationPageContext();
-  const { data: formConfig, isLoading: isLoadingConfig } = useFormConfig();
+  const {
+    data: formConfig,
+    isLoading: isLoadingConfig,
+    isError: isFormConfigError,
+    error: formConfigError,
+    refetch: refetchFormConfig,
+  } = useFormConfig();
   const { mutate, isPending, isError, error } = useCreateLead();
   const scrollY = useSharedValue(0);
   const { top, bottom } = useSafeAreaInsets();
@@ -82,6 +88,51 @@ export default function NewLeadScreen({ navigation }: Props) {
     );
   }
 
+  // Show error state for form config failure
+  if (isFormConfigError) {
+    return (
+      <View
+        style={[styles.container, { backgroundColor: theme.colors.background }]}
+      >
+        <ModalHeader scrollY={scrollY} onClose={() => navigation.goBack()} />
+        <View
+          style={[styles.errorContainer, { paddingTop: stickyHeaderHeight }]}
+        >
+          <Text style={[theme.fonts.titleMedium, { textAlign: 'center' }]}>
+            Unable to Load Form
+          </Text>
+          <Text
+            style={[
+              theme.fonts.bodyMedium,
+              styles.errorMessage,
+              { color: theme.colors.onSurfaceVariant, textAlign: 'center' },
+            ]}
+          >
+            {formConfigError?.message ||
+              'Failed to load the form configuration. Please try again.'}
+          </Text>
+          <View style={styles.errorButtons}>
+            <Button
+              mode="outlined"
+              onPress={() => refetchFormConfig()}
+              style={styles.errorButton}
+            >
+              Retry
+            </Button>
+            <Button
+              mode="contained"
+              onPress={() => navigation.goBack()}
+              style={styles.errorButton}
+            >
+              Go Back
+            </Button>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+  // Show error state if form config is missing (shouldn't happen if above checks work)
   if (!formConfig) {
     return (
       <View
@@ -92,15 +143,33 @@ export default function NewLeadScreen({ navigation }: Props) {
           style={[styles.errorContainer, { paddingTop: stickyHeaderHeight }]}
         >
           <Text style={[theme.fonts.titleMedium, { textAlign: 'center' }]}>
-            Unable to load form
+            Form Not Available
           </Text>
-          <Button
-            mode="contained"
-            onPress={() => navigation.goBack()}
-            style={styles.errorButton}
+          <Text
+            style={[
+              theme.fonts.bodyMedium,
+              styles.errorMessage,
+              { color: theme.colors.onSurfaceVariant, textAlign: 'center' },
+            ]}
           >
-            Go Back
-          </Button>
+            The form configuration is not available. Please try again.
+          </Text>
+          <View style={styles.errorButtons}>
+            <Button
+              mode="outlined"
+              onPress={() => refetchFormConfig()}
+              style={styles.errorButton}
+            >
+              Retry
+            </Button>
+            <Button
+              mode="contained"
+              onPress={() => navigation.goBack()}
+              style={styles.errorButton}
+            >
+              Go Back
+            </Button>
+          </View>
         </View>
       </View>
     );
@@ -199,8 +268,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 24,
   },
+  errorMessage: {
+    marginTop: 12,
+    marginBottom: 24,
+  },
+  errorButtons: {
+    flexDirection: 'row',
+    gap: 12,
+  },
   errorButton: {
-    marginTop: 16,
+    flex: 1,
   },
   floatingButtonContainer: {
     position: 'absolute',

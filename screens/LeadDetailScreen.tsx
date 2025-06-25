@@ -20,7 +20,7 @@ import {
   View,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Button, Card, Surface, Text, useTheme } from 'react-native-paper';
+import { Button, Card, FAB, List, Surface, useTheme } from 'react-native-paper';
 import Animated, { useSharedValue } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -32,7 +32,7 @@ const AnimatedCard = Animated.createAnimatedComponent(Card);
 
 export default function LeadDetailScreen({ route, navigation }: Props) {
   const { leadId } = route.params;
-  const { data: lead, isLoading, isError, refetch } = useLead(leadId);
+  const { data: lead, isLoading, refetch, isError } = useLead(leadId);
   const updateLead = useUpdateLead();
   const deleteLead = useDeleteLead();
   const theme = useTheme();
@@ -210,54 +210,58 @@ export default function LeadDetailScreen({ route, navigation }: Props) {
 
   if (isError) {
     return (
-      <View
-        style={[
-          styles.centerContainer,
-          { backgroundColor: theme.colors.background },
-        ]}
-      >
-        <Text
-          style={[
-            theme.fonts.titleMedium,
-            { color: theme.colors.error, textAlign: 'center' },
-          ]}
+      <View style={{ flex: 1 }}>
+        <ScrollHeader
+          scrollY={scrollY}
+          renderRight={renderLightHeaderActions}
+        />
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingHorizontal: 24,
+          }}
         >
-          Unable to load lead details
-        </Text>
-        <Button
-          mode="contained"
-          onPress={() => refetch()}
-          style={{ marginTop: 16 }}
-        >
-          Try Again
-        </Button>
+          <List.Item
+            title="Error loading lead details"
+            description="Unable to load this lead's information. Please check your connection and try again."
+            titleStyle={{ textAlign: 'center' }}
+            descriptionStyle={{ textAlign: 'center' }}
+          />
+        </View>
       </View>
     );
   }
 
   if (!lead) {
     return (
-      <View
-        style={[
-          styles.centerContainer,
-          { backgroundColor: theme.colors.background },
-        ]}
-      >
-        <Text
-          style={[
-            theme.fonts.titleMedium,
-            { color: theme.colors.onSurface, textAlign: 'center' },
-          ]}
+      <View style={{ flex: 1 }}>
+        <ScrollHeader
+          scrollY={scrollY}
+          renderRight={renderLightHeaderActions}
+        />
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingHorizontal: 24,
+          }}
         >
-          Lead not found
-        </Text>
-        <Button
-          mode="outlined"
-          onPress={() => navigation.goBack()}
-          style={{ marginTop: 16 }}
-        >
-          Go Back
-        </Button>
+          <List.Item
+            title="Lead not found"
+            description="This lead may have been deleted or moved. Please check your lead list and try again."
+            titleStyle={{ textAlign: 'center' }}
+            descriptionStyle={{ textAlign: 'center' }}
+          />
+          <FAB
+            icon="arrow-left"
+            onPress={() => navigation.goBack()}
+            style={{ marginTop: 16 }}
+            label="Go Back"
+          />
+        </View>
       </View>
     );
   }

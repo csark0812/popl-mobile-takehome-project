@@ -49,6 +49,37 @@ jest.mock('react-native-toast-message', () => ({
   hide: jest.fn(),
 }));
 
+// Mock Expo Vector Icons to prevent async state update warnings in tests
+jest.mock('@expo/vector-icons', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+
+  const MockIcon = React.forwardRef((props, ref) => {
+    return React.createElement(View, {
+      ...props,
+      ref,
+      testID: props.testID || 'mock-icon',
+      accessibilityRole: 'button',
+      children: null,
+    });
+  });
+
+  return {
+    MaterialIcons: MockIcon,
+    Ionicons: MockIcon,
+    FontAwesome: MockIcon,
+    AntDesign: MockIcon,
+    Entypo: MockIcon,
+    EvilIcons: MockIcon,
+    Feather: MockIcon,
+    Foundation: MockIcon,
+    MaterialCommunityIcons: MockIcon,
+    Octicons: MockIcon,
+    SimpleLineIcons: MockIcon,
+    Zocial: MockIcon,
+  };
+});
+
 // Provide default implementations for hooks/api when a test hasn't mocked them explicitly
 jest.mock('@hooks/api', () => ({
   useLeads: () => ({ data: [], isLoading: false, isError: false }),

@@ -26,12 +26,20 @@ export default function EditLeadScreen({ route, navigation }: Props) {
   const { leadId } = route.params;
   const theme = useTheme();
   const { stickyHeaderHeight } = useNavigationPageContext();
-  const { data: formConfig, isLoading: isLoadingConfig } = useFormConfig();
+  const {
+    data: formConfig,
+    isLoading: isLoadingConfig,
+    isError: isFormConfigError,
+    error: formConfigError,
+    refetch: refetchFormConfig,
+  } = useFormConfig();
+
   const {
     data: lead,
     isLoading: isLoadingLead,
     isError: isLeadError,
     error: leadError,
+    refetch: refetchLead,
   } = useLead(leadId);
   const { mutate, isPending, isError, error } = useUpdateLead();
   const scrollY = useSharedValue(0);
@@ -81,14 +89,19 @@ export default function EditLeadScreen({ route, navigation }: Props) {
               { color: theme.colors.onSurfaceVariant },
             ]}
           >
-            Loading lead...
+            {isLoadingConfig && isLoadingLead
+              ? 'Loading...'
+              : isLoadingConfig
+                ? 'Loading form...'
+                : 'Loading lead...'}
           </Text>
         </View>
       </View>
     );
   }
 
-  if (!formConfig || isLeadError || !lead) {
+  // Show error state for form config failure
+  if (isFormConfigError) {
     return (
       <View
         style={[styles.container, { backgroundColor: theme.colors.background }]}
@@ -98,15 +111,121 @@ export default function EditLeadScreen({ route, navigation }: Props) {
           style={[styles.errorContainer, { paddingTop: stickyHeaderHeight }]}
         >
           <Text style={[theme.fonts.titleMedium, { textAlign: 'center' }]}>
-            Unable to load lead
+            Unable to Load Form
           </Text>
-          <Button
-            mode="contained"
-            onPress={() => navigation.goBack()}
-            style={styles.errorButton}
+          <Text
+            style={[
+              theme.fonts.bodyMedium,
+              styles.errorMessage,
+              { color: theme.colors.onSurfaceVariant, textAlign: 'center' },
+            ]}
           >
-            Go Back
-          </Button>
+            {formConfigError?.message ||
+              'Failed to load the form configuration. Please try again.'}
+          </Text>
+          <View style={styles.errorButtons}>
+            <Button
+              mode="outlined"
+              onPress={() => refetchFormConfig()}
+              style={styles.errorButton}
+            >
+              Retry
+            </Button>
+            <Button
+              mode="contained"
+              onPress={() => navigation.goBack()}
+              style={styles.errorButton}
+            >
+              Go Back
+            </Button>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+  // Show error state for lead failure
+  if (isLeadError || !lead) {
+    return (
+      <View
+        style={[styles.container, { backgroundColor: theme.colors.background }]}
+      >
+        <ModalHeader scrollY={scrollY} onClose={() => navigation.goBack()} />
+        <View
+          style={[styles.errorContainer, { paddingTop: stickyHeaderHeight }]}
+        >
+          <Text style={[theme.fonts.titleMedium, { textAlign: 'center' }]}>
+            Unable to Load Lead
+          </Text>
+          <Text
+            style={[
+              theme.fonts.bodyMedium,
+              styles.errorMessage,
+              { color: theme.colors.onSurfaceVariant, textAlign: 'center' },
+            ]}
+          >
+            {leadError?.message ||
+              'Failed to load the lead data. Please try again.'}
+          </Text>
+          <View style={styles.errorButtons}>
+            <Button
+              mode="outlined"
+              onPress={() => refetchLead()}
+              style={styles.errorButton}
+            >
+              Retry
+            </Button>
+            <Button
+              mode="contained"
+              onPress={() => navigation.goBack()}
+              style={styles.errorButton}
+            >
+              Go Back
+            </Button>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+  // Show error state if form config is missing (shouldn't happen if above checks work)
+  if (!formConfig) {
+    return (
+      <View
+        style={[styles.container, { backgroundColor: theme.colors.background }]}
+      >
+        <ModalHeader scrollY={scrollY} onClose={() => navigation.goBack()} />
+        <View
+          style={[styles.errorContainer, { paddingTop: stickyHeaderHeight }]}
+        >
+          <Text style={[theme.fonts.titleMedium, { textAlign: 'center' }]}>
+            Form Not Available
+          </Text>
+          <Text
+            style={[
+              theme.fonts.bodyMedium,
+              styles.errorMessage,
+              { color: theme.colors.onSurfaceVariant, textAlign: 'center' },
+            ]}
+          >
+            The form configuration is not available. Please try again.
+          </Text>
+          <View style={styles.errorButtons}>
+            <Button
+              mode="outlined"
+              onPress={() => refetchFormConfig()}
+              style={styles.errorButton}
+            >
+              Retry
+            </Button>
+            <Button
+              mode="contained"
+              onPress={() => navigation.goBack()}
+              style={styles.errorButton}
+            >
+              Go Back
+            </Button>
+          </View>
         </View>
       </View>
     );
@@ -205,8 +324,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 24,
   },
+  errorMessage: {
+    marginTop: 12,
+    marginBottom: 24,
+  },
+  errorButtons: {
+    flexDirection: 'row',
+    gap: 12,
+  },
   errorButton: {
-    marginTop: 16,
+    flex: 1,
   },
   floatingButtonContainer: {
     position: 'absolute',
