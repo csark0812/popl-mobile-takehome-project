@@ -86,3 +86,5 @@ export function cleanLeadData(lead: Lead): Lead {
 export function cleanLeadsData(leads: Lead[]): Lead[] {
   return leads.map(cleanLeadData);
 }
+
+export * from './contact';

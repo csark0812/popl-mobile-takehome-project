@@ -1,9 +1,8 @@
 import { usePressScale } from '@hooks/usePressScale';
 import { Lead } from '@types';
-import * as MailComposer from 'expo-mail-composer';
-import * as SMS from 'expo-sms';
+import { callPhoneNumber, composeEmail, sendText } from '@utils/contact';
 import React from 'react';
-import { Alert, Linking, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button, useTheme } from 'react-native-paper';
 import Animated from 'react-native-reanimated';
 
@@ -47,47 +46,21 @@ export default function ActionButtons({ lead, style }: ActionButtonsProps) {
 
   const handleCall = async () => {
     if (!lead.phone) return;
-
-    try {
-      await Linking.openURL(`tel:${lead.phone}`);
-    } catch (error) {
-      Alert.alert('Error', 'Unable to make phone call');
-    }
+    await callPhoneNumber(lead.phone);
   };
 
   const handleText = async () => {
     if (!lead.phone) return;
-
-    try {
-      const isAvailable = await SMS.isAvailableAsync();
-      if (isAvailable) {
-        await SMS.sendSMSAsync([lead.phone], `Hi ${lead.name}, `);
-      } else {
-        Alert.alert('Error', 'SMS is not available on this device');
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Unable to send text message');
-    }
+    await sendText(lead.phone, `Hi ${lead.name}, `);
   };
 
   const handleEmail = async () => {
     if (!lead.email) return;
-
-    try {
-      const isAvailable = await MailComposer.isAvailableAsync();
-      if (isAvailable) {
-        await MailComposer.composeAsync({
-          recipients: [lead.email],
-          subject: `Following up - ${lead.name}`,
-          body: `Hi ${lead.name},\n\n`,
-        });
-      } else {
-        // Fallback to native mailto link
-        await Linking.openURL(`mailto:${lead.email}`);
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Unable to send email');
-    }
+    await composeEmail(
+      lead.email,
+      `Following up - ${lead.name}`,
+      `Hi ${lead.name},\n\n`,
+    );
   };
 
   // Only render buttons for available contact methods
@@ -107,7 +80,7 @@ export default function ActionButtons({ lead, style }: ActionButtonsProps) {
           callAnimatedStyle,
           { backgroundColor: theme.colors.primary },
         ]}
-        labelStyle={{ color: 'white' }}
+        labelStyle={[styles.buttonLabel, { color: theme.colors.onPrimary }]}
         contentStyle={styles.buttonContent}
         accessibilityLabel={`Call ${lead.name}`}
         accessibilityHint="Opens phone app to call this lead"
@@ -129,7 +102,7 @@ export default function ActionButtons({ lead, style }: ActionButtonsProps) {
           textAnimatedStyle,
           { backgroundColor: theme.colors.secondary },
         ]}
-        labelStyle={{ color: 'white' }}
+        labelStyle={[styles.buttonLabel, { color: theme.colors.onSecondary }]}
         contentStyle={styles.buttonContent}
         accessibilityLabel={`Text ${lead.name}`}
         accessibilityHint="Opens SMS app to send text message to this lead"
@@ -153,7 +126,7 @@ export default function ActionButtons({ lead, style }: ActionButtonsProps) {
           emailAnimatedStyle,
           { backgroundColor: theme.colors.tertiary },
         ]}
-        labelStyle={{ color: 'white' }}
+        labelStyle={[styles.buttonLabel, { color: theme.colors.onTertiary }]}
         contentStyle={styles.buttonContent}
         accessibilityLabel={`Email ${lead.name}`}
         accessibilityHint="Opens email app to send email to this lead"
@@ -180,8 +153,22 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     flex: 1,
+    // Shadow for iOS
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    // Shadow for Android
+    elevation: 4,
   },
   buttonContent: {
-    paddingVertical: 12,
+    paddingVertical: 8,
+  },
+  buttonLabel: {
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
