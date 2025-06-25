@@ -3,23 +3,73 @@ description:
 globs: 
 alwaysApply: true
 ---
-# MCP Tools Usage Rule
+# MCP Tool Call Guidelines
 
-When solving coding tasks in this project, follow these guidelines for using your mcp tools:
+You have access to MCP tools for coding tasks. These guidelines govern when and how to make tool calls:
 
-1. **ALWAYS follow the tool call schema exactly and include all required parameters.**
-2. **NEVER call tools that are not available.**
-3. **Bias toward using tools to gather or confirm useful information.**
-4. **Use tools to retain or reason through information as needed.**
-5. **Use tools when they will improve accuracy or clarity.**
-6. **Err on the side of gathering more context via tools.**
-7. **If a tool call is successful but the response from the tool call returns an error, attempt to rerun the tool up to 3 times based on the error provided.**
-8. **Tool calls that are additive (gathering information, reasoning, or analysis) are auto-approved and do not require explicit user confirmation.**
-9. **Tool calls that are destructive (deleting, overwriting, or making irreversible changes) MUST require explicit user approval before execution.**
+## Tool Call Principles
 
-Use your tools proactively to:
-- Gather information about the codebase, files, or project structure.
-- Confirm assumptions or fill in knowledge gaps.
-- Retain, reason through, or analyze information as needed for the task.
-- Ensure your answers are as accurate and clear as possible.
-- Prefer tool-based investigation over guessing or making unsupported assumptions.
+• **Tool Set Awareness**: You have access to two distinct tool sets - built-in agent tools and MCP-provided tools. Always evaluate both sets to identify the most specific tool for your current need.
+• **Specificity Priority**: Always choose the most specific tool available across both tool sets. Prefer specialized tools over generic alternatives regardless of which set they belong to.
+• **Exact Schema Compliance**: Every tool call must use the exact parameter names, types, and structure specified in the tool's schema. Verify parameter requirements before calling.
+• **Required Parameters**: Include all mandatory parameters in every call. Missing required parameters will cause failures.
+• **Error Recovery**: When a tool call fails, retry up to 3 times with modifications based on the specific error message. Adjust parameter values, formats, or approach as indicated by the error.
+• **Destructive Call Safety**: Before making any tool calls that delete, overwrite, or irreversibly modify files, explicitly describe what will be changed and wait for user approval.
+
+## Tool Call Categories
+
+### Internal Code Analysis Calls
+*File system tools, code search, file readers, AST analyzers*
+
+Make these tool calls to examine existing code and project structure:
+• Call file exploration tools to understand directory organization and locate relevant files
+• Use code search tools to find specific functions, classes, or patterns within the codebase
+• Call file reading tools to examine current implementations before making changes
+• Use AST analysis tools to understand code structure and dependencies
+• Make these calls when you need to gather context about how existing code works
+
+### External Data Retrieval Calls
+*Web search, API calls, data fetching, research tools*
+
+Make these specialized tool calls to gather external information:
+• Call specific API tools to retrieve real-time data from external services
+• Use targeted research tools for market analysis, competitive intelligence, or trend data
+• Call documentation retrieval tools for official specifications and technical references
+• Use data fetching tools for current versions, compatibility matrices, or external datasets
+• Make these calls when you need authoritative, up-to-date information from outside sources
+• Always prefer the most specific external tool over generic web search when available
+
+## Tool Call Decision Logic
+
+**Before making any tool calls:**
+1. **Evaluate Context Sufficiency**: Determine if the user's request provides enough specificity to proceed
+2. **If context is clear** → proceed with appropriate tool calls based on your analysis needs
+3. **If context is ambiguous** → ask targeted questions about which files, libraries, or functionality to examine
+
+**Tool call sequencing:**
+• Survey both built-in and MCP tool sets to identify the most specific tool for each information need
+• Make internal analysis calls first to understand the current state
+• Follow with external data calls using the most targeted tool available
+• Space tool calls logically throughout your reasoning process, not all at once
+• Each tool call should build on previous results
+
+## Tool Call Response Pattern
+
+**When making tool calls:**
+1. Briefly state what information you're gathering and why
+2. Make the tool call at the logical point where you need that information
+3. Use the results immediately in your reasoning
+4. Continue with additional tool calls only as needed for your analysis
+
+**Example flow**: "Let me examine the current authentication implementation → [file read tool call] → Based on this code, I need to check the JWT library version → [package info tool call] → Now I can recommend the specific changes needed."
+
+## Tool Call Validation
+
+• **Before calling**: Confirm the tool exists and you're using correct parameter names
+• **After calling**: Check if the response contains the expected information
+• **On errors**: Read the error message carefully and adjust your next attempt accordingly
+• **Never assume**: If a tool call doesn't return expected results, investigate why rather than guessing
+
+---
+
+*Focus: Make deliberate, well-timed tool calls with correct parameters to gather exactly the information needed for effective code assistance.*

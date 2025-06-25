@@ -88,9 +88,19 @@ const Popover = forwardRef<PopoverRef, PopoverProps>(
           contentContainerStyle={styles.modalContainer}
         >
           <Pressable style={StyleSheet.absoluteFillObject} onPress={hideModal}>
+            <Animated.View
+              style={[
+                StyleSheet.absoluteFillObject,
+                {
+                  backgroundColor: theme.dark
+                    ? 'rgba(0, 0, 0, 0.8)'
+                    : 'rgba(0, 0, 0, 0.5)',
+                },
+              ]}
+            />
             <BlurView
               intensity={20}
-              tint="dark"
+              tint={theme.dark ? 'light' : 'dark'}
               style={StyleSheet.absoluteFillObject}
             />
           </Pressable>

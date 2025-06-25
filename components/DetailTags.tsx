@@ -1,6 +1,7 @@
 import React, { useCallback, useRef } from 'react';
-import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { IconButton, Surface, Text, useTheme } from 'react-native-paper';
+import Animated, { FadeIn, FadeOut, Layout } from 'react-native-reanimated';
 import AddNewTagPopover, { AddNewTagPopoverRef } from './AddNewTagPopover';
 
 interface DetailTagsProps {
@@ -9,6 +10,10 @@ interface DetailTagsProps {
   onAddTag?: (tag: string) => void;
   onRemoveTag?: (tagIndex: number) => void;
 }
+
+const AnimatedSurface = Animated.createAnimatedComponent(Surface);
+const AnimatedTouchableOpacity =
+  Animated.createAnimatedComponent(TouchableOpacity);
 
 const DetailTags: React.FC<DetailTagsProps> = ({
   tags,
@@ -23,8 +28,6 @@ const DetailTags: React.FC<DetailTagsProps> = ({
     (tag: string) => {
       if (!tags.includes(tag)) {
         onAddTag?.(tag);
-      } else {
-        Alert.alert('Duplicate Tag', 'This tag already exists for this lead.');
       }
     },
     [tags, onAddTag],
@@ -32,20 +35,9 @@ const DetailTags: React.FC<DetailTagsProps> = ({
 
   const handleRemoveTag = useCallback(
     (index: number) => {
-      Alert.alert(
-        'Remove Tag',
-        `Are you sure you want to remove "${tags[index]}"?`,
-        [
-          { text: 'Cancel', style: 'cancel' },
-          {
-            text: 'Remove',
-            style: 'destructive',
-            onPress: () => onRemoveTag?.(index),
-          },
-        ],
-      );
+      onRemoveTag?.(index);
     },
-    [tags, onRemoveTag],
+    [onRemoveTag],
   );
 
   const showAddTagPopover = () => {
@@ -54,9 +46,9 @@ const DetailTags: React.FC<DetailTagsProps> = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.tagsWrapper}>
+      <Animated.View style={styles.tagsWrapper} layout={Layout}>
         {tags.map((tag, index) => (
-          <Surface
+          <AnimatedSurface
             key={`${leadId}-tag-${index}`}
             style={[
               styles.tagContainer,
@@ -66,6 +58,9 @@ const DetailTags: React.FC<DetailTagsProps> = ({
               },
             ]}
             elevation={0}
+            entering={FadeIn}
+            exiting={FadeOut}
+            layout={Layout}
           >
             <Text
               style={[styles.tagText, { color: theme.colors.onSurfaceVariant }]}
@@ -79,19 +74,21 @@ const DetailTags: React.FC<DetailTagsProps> = ({
               iconColor={theme.colors.onSurfaceVariant}
               style={styles.removeButton}
             />
-          </Surface>
+          </AnimatedSurface>
         ))}
 
-        <TouchableOpacity
+        <AnimatedTouchableOpacity
           style={[styles.addButton, { borderColor: theme.colors.primary }]}
           onPress={showAddTagPopover}
           activeOpacity={0.7}
+          entering={FadeIn}
+          layout={Layout}
         >
           <Text style={[styles.addButtonText, { color: theme.colors.primary }]}>
             + Add Tag
           </Text>
-        </TouchableOpacity>
-      </View>
+        </AnimatedTouchableOpacity>
+      </Animated.View>
 
       <AddNewTagPopover ref={tagPopoverRef} onSubmit={handleAddTag} />
     </View>

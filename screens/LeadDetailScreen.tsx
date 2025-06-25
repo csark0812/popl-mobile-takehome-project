@@ -4,12 +4,13 @@ import ActionButtons from '@components/ActionButtons';
 import ContactInformation from '@components/ContactInformation';
 import DetailBottomActions from '@components/DetailBottomActions';
 import DetailsHeroSection from '@components/DetailsHeroSection';
+import LoadingOverlay, { LoadingOverlayRef } from '@components/LoadingOverlay';
 import ScrollHeader from '@components/ScrollHeader';
 import StickyHeader from '@components/StickyHeader';
-import { useLead, useUpdateLead } from '@hooks/api';
+import { useDeleteLead, useLead, useUpdateLead } from '@hooks/api';
 import { RootStackParamList } from '@navigation/index';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   Alert,
   Dimensions,
@@ -23,7 +24,6 @@ import {
   ActivityIndicator,
   Button,
   Card,
-  FAB,
   Surface,
   Text,
   useTheme,
@@ -41,9 +41,11 @@ export default function LeadDetailScreen({ route, navigation }: Props) {
   const { leadId } = route.params;
   const { data: lead, isLoading, isError, refetch } = useLead(leadId);
   const updateLead = useUpdateLead();
+  const deleteLead = useDeleteLead();
   const theme = useTheme();
   const { top, bottom } = useSafeAreaInsets();
   const [refreshing, setRefreshing] = useState(false);
+  const loadingOverlayRef = useRef<LoadingOverlayRef>(null);
 
   // Animation values
   const scrollY = useSharedValue(0);
@@ -88,19 +90,39 @@ export default function LeadDetailScreen({ route, navigation }: Props) {
           text: 'Delete',
           style: 'destructive',
           onPress: () => {
-            Alert.alert('Delete Lead', 'Lead would be deleted from the system');
+            loadingOverlayRef.current?.show('Deleting lead...');
+            deleteLead.mutate(leadId, {
+              onSuccess: () => {
+                loadingOverlayRef.current?.hide();
+                navigation.goBack();
+              },
+              onError: (error) => {
+                loadingOverlayRef.current?.hide();
+                Alert.alert(
+                  'Error',
+                  'Failed to delete lead. Please try again.',
+                  [{ text: 'OK' }],
+                );
+              },
+            });
           },
         },
       ],
     );
-  }, []);
+  }, [deleteLead, leadId, navigation]);
 
   // Tag handlers
   const handleAddTag = useCallback(
     (newTag: string) => {
       if (!lead) return;
 
-      const updatedTags = [...(lead.tags || []), newTag];
+      const currentTags = lead.tags || [];
+      if (currentTags.includes(newTag)) {
+        Alert.alert('Duplicate Tag', 'This tag already exists for this lead.');
+        return;
+      }
+
+      const updatedTags = [...currentTags, newTag];
       updateLead.mutate({
         id: lead.id,
         data: { tags: updatedTags },
@@ -263,7 +285,7 @@ export default function LeadDetailScreen({ route, navigation }: Props) {
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps="handled"
         style={styles.scrollView}
-        contentContainerStyle={[{ paddingBottom: bottom + 80 }]}
+        contentContainerStyle={[{ paddingBottom: bottom }]}
         onScroll={handleScroll}
         scrollEventThrottle={16}
         refreshControl={
@@ -306,19 +328,7 @@ export default function LeadDetailScreen({ route, navigation }: Props) {
         </View>
       </KeyboardAwareScrollView>
 
-      {/* Floating Action Button */}
-      <FAB
-        icon={primaryAction === 'call' ? 'phone' : 'email'}
-        onPress={primaryAction === 'call' ? handleCall : handleEmail}
-        style={[
-          styles.fab,
-          {
-            bottom: bottom + 24,
-            backgroundColor:
-              primaryAction === 'call' ? '#4CAF50' : theme.colors.primary,
-          },
-        ]}
-      />
+      <LoadingOverlay ref={loadingOverlayRef} />
     </View>
   );
 }

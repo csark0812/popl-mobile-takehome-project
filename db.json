@@ -58,13 +58,6 @@
       "createdAt": "2024-03-05T15:45:00Z"
     },
     {
-      "notes": "Requested demo of API integration test editasdfasdf",
-      "id": "8f7e6d5c-4b3a-2m1n-9o8p-7q6r5s4t3u2v",
-      "name": "",
-      "email": "",
-      "tags": []
-    },
-    {
       "id": "9b4f8d7e-6c5b-4a3d-2n1m-8p7q6r5s4t3u",
       "name": "Sarah Johnson",
       "email": "sjohnson@cloudscape.net",
@@ -86,7 +79,6 @@
       "title": "CEO",
       "phone": "+1 (555) 678-9012",
       "tags": [
-        "education",
         "enterprise"
       ],
       "notes": "Looking for educational integration",

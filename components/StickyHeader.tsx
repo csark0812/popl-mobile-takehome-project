@@ -63,20 +63,23 @@ const StickyHeader: React.FC<StickyHeaderProps> = ({
           left: 0,
           right: 0,
           zIndex: 1000,
+          paddingBottom: 10,
+          pointerEvents: 'box-none',
         },
         animatedStyle,
       ]}
     >
       <ProgressiveBlurView
-        style={StyleSheet.absoluteFillObject}
-        tint={'systemThickMaterial'}
+        style={[StyleSheet.absoluteFillObject, { pointerEvents: 'box-none' }]}
+        tint={
+          theme.dark ? 'systemThickMaterialDark' : 'systemThickMaterialLight'
+        }
         intensity={50}
         gradientStart={1}
-        gradientEnd={0.7}
+        gradientEnd={0.6}
       />
       <Appbar.Header
         style={{
-          marginBottom: 10,
           backgroundColor: 'transparent',
           elevation: 0,
           shadowOpacity: 0,
