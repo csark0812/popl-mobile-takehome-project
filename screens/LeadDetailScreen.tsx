@@ -1,11 +1,12 @@
 import AboutThisLead from '@components/AboutThisLead';
+import ActionBarIcon from '@components/ActionBarIcon';
 import ActionButtons from '@components/ActionButtons';
 import ContactInformation from '@components/ContactInformation';
 import DetailBottomActions from '@components/DetailBottomActions';
 import DetailsHeroSection from '@components/DetailsHeroSection';
 import ScrollHeader from '@components/ScrollHeader';
 import StickyHeader from '@components/StickyHeader';
-import { useLead } from '@hooks/api';
+import { useLead, useUpdateLead } from '@hooks/api';
 import { RootStackParamList } from '@navigation/index';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useCallback, useState } from 'react';
@@ -23,7 +24,6 @@ import {
   Button,
   Card,
   FAB,
-  IconButton,
   Surface,
   Text,
   useTheme,
@@ -40,6 +40,7 @@ const AnimatedCard = Animated.createAnimatedComponent(Card);
 export default function LeadDetailScreen({ route, navigation }: Props) {
   const { leadId } = route.params;
   const { data: lead, isLoading, isError, refetch } = useLead(leadId);
+  const updateLead = useUpdateLead();
   const theme = useTheme();
   const { top, bottom } = useSafeAreaInsets();
   const [refreshing, setRefreshing] = useState(false);
@@ -77,10 +78,6 @@ export default function LeadDetailScreen({ route, navigation }: Props) {
     Alert.alert('Share Lead', 'Share functionality would open share dialog');
   }, []);
 
-  const handleAddNote = useCallback(() => {
-    Alert.alert('Add Note', 'Note functionality would open note editor');
-  }, []);
-
   const handleDeleteLead = useCallback(() => {
     Alert.alert(
       'Delete Lead',
@@ -99,13 +96,62 @@ export default function LeadDetailScreen({ route, navigation }: Props) {
   }, []);
 
   // Tag handlers
-  const handleAddTag = useCallback((newTag: string) => {
-    Alert.alert('Add Tag', `Tag "${newTag}" would be added to the lead`);
-  }, []);
+  const handleAddTag = useCallback(
+    (newTag: string) => {
+      if (!lead) return;
 
-  const handleRemoveTag = useCallback((tagIndex: number) => {
-    Alert.alert('Remove Tag', `Tag at index ${tagIndex} would be removed`);
-  }, []);
+      const updatedTags = [...(lead.tags || []), newTag];
+      updateLead.mutate({
+        id: lead.id,
+        data: { tags: updatedTags },
+      });
+    },
+    [lead, updateLead],
+  );
+
+  const handleRemoveTag = useCallback(
+    (tagIndex: number) => {
+      if (!lead) return;
+
+      const currentTags = lead.tags || [];
+      const tagToRemove = currentTags[tagIndex];
+
+      Alert.alert(
+        'Remove Tag',
+        `Are you sure you want to remove "${tagToRemove}"?`,
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Remove',
+            style: 'destructive',
+            onPress: () => {
+              const updatedTags = currentTags.filter(
+                (_, index) => index !== tagIndex,
+              );
+              updateLead.mutate({
+                id: lead.id,
+                data: { tags: updatedTags },
+              });
+            },
+          },
+        ],
+      );
+    },
+    [lead, updateLead],
+  );
+
+  // Note handler
+  const handleUpdateNote = useCallback(
+    (note: string) => {
+      if (!lead) return;
+
+      updateLead.mutate({
+        id: lead.id,
+        data: { notes: note.trim() || null },
+      });
+    },
+    [lead, updateLead],
+  );
 
   // Pull to refresh
   const onRefresh = useCallback(async () => {
@@ -123,21 +169,12 @@ export default function LeadDetailScreen({ route, navigation }: Props) {
   );
 
   // Render header actions
-  const renderHeaderActions = () => (
-    <View style={{ flexDirection: 'row' }}>
-      <IconButton
-        icon="pencil"
-        size={24}
-        onPress={handleEdit}
-        iconColor={theme.colors.onSurface}
-      />
-      <IconButton
-        icon="share"
-        size={24}
-        onPress={handleShare}
-        iconColor={theme.colors.onSurface}
-      />
-    </View>
+  const renderLightHeaderActions = () => (
+    <ActionBarIcon icon="pencil" onPress={handleEdit} type="light" />
+  );
+
+  const renderDarkHeaderActions = () => (
+    <ActionBarIcon icon="pencil" onPress={handleEdit} type="dark" />
   );
 
   if (isLoading) {
@@ -221,7 +258,7 @@ export default function LeadDetailScreen({ route, navigation }: Props) {
     <View
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
-      <StickyHeader scrollY={scrollY} renderRight={renderHeaderActions} />
+      <StickyHeader scrollY={scrollY} renderRight={renderDarkHeaderActions} />
 
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps="handled"
@@ -238,7 +275,10 @@ export default function LeadDetailScreen({ route, navigation }: Props) {
           />
         }
       >
-        <ScrollHeader scrollY={scrollY} renderRight={renderHeaderActions} />
+        <ScrollHeader
+          scrollY={scrollY}
+          renderRight={renderLightHeaderActions}
+        />
 
         <View style={{ paddingHorizontal: 16 }}>
           {/* Hero Section */}
@@ -252,7 +292,7 @@ export default function LeadDetailScreen({ route, navigation }: Props) {
             lead={lead}
             onAddTag={handleAddTag}
             onRemoveTag={handleRemoveTag}
-            onAddNote={handleAddNote}
+            onUpdateNote={handleUpdateNote}
           />
 
           {/* Contact Information */}

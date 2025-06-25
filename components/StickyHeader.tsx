@@ -2,7 +2,7 @@ import { useSelectedColorScheme } from '@hooks/useSelectedColorScheme';
 import { useNavigationPageContext } from 'context/NavigationPageContext';
 import React, { useState } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
-import { Appbar } from 'react-native-paper';
+import { Appbar, useTheme } from 'react-native-paper';
 import Animated, {
   FadeIn,
   FadeOut,
@@ -11,6 +11,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import ActionBarIcon from './ActionBarIcon';
 import ProgressiveBlurView from './ProgressiveBlurView';
 
 interface StickyHeaderProps {
@@ -31,6 +32,7 @@ const StickyHeader: React.FC<StickyHeaderProps> = ({
   const { navigation, route, options, headerHeight, setStickyHeaderHeight } =
     useNavigationPageContext();
   const scheme = useSelectedColorScheme();
+  const theme = useTheme();
   const title = options?.title || route?.name;
   const [back] = useState(
     navigation?.canGoBack ? navigation.canGoBack() : false,
@@ -67,7 +69,7 @@ const StickyHeader: React.FC<StickyHeaderProps> = ({
     >
       <ProgressiveBlurView
         style={StyleSheet.absoluteFillObject}
-        tint={scheme === 'dark' ? 'dark' : 'light'}
+        tint={'systemThickMaterial'}
         intensity={50}
         gradientStart={1}
         gradientEnd={0.7}
@@ -85,7 +87,14 @@ const StickyHeader: React.FC<StickyHeaderProps> = ({
           exiting={FadeOut}
           style={[styles.currentContent, style]}
         >
-          {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
+          {back ? (
+            <ActionBarIcon
+              icon="arrow-left"
+              onPress={navigation.goBack}
+              type="dark"
+              style={styles.backButton}
+            />
+          ) : null}
           <View style={styles.contentContainer}>
             <Appbar.Content title={title} titleStyle={styles.greeting} />
             {renderRight?.()}
@@ -113,6 +122,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     letterSpacing: 0.5,
+  },
+  backButton: {
+    marginLeft: 16,
   },
 });
 

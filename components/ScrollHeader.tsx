@@ -2,7 +2,7 @@ import { useSessionStore } from '@hooks/sessionStore';
 import { useNavigationPageContext } from 'context/NavigationPageContext';
 import React, { useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Appbar } from 'react-native-paper';
+import { Appbar, useTheme } from 'react-native-paper';
 import Animated, {
   FadeIn,
   FadeOut,
@@ -11,6 +11,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getGreeting } from '../utils';
+import ActionBarIcon from './ActionBarIcon';
 
 interface ScrollHeaderProps {
   scrollY: any;
@@ -27,6 +28,7 @@ const ScrollHeader: React.FC<ScrollHeaderProps> = ({
     useNavigationPageContext();
   const name = useSessionStore((s) => s.name);
   const signOut = useSessionStore((s) => s.signOut);
+  const theme = useTheme();
 
   const greeting = useMemo(() => getGreeting(name), [name]);
   const title = options?.title || route?.name;
@@ -60,7 +62,12 @@ const ScrollHeader: React.FC<ScrollHeaderProps> = ({
           }}
         >
           {back ? (
-            <Appbar.BackAction size={20} onPress={navigation.goBack} />
+            <ActionBarIcon
+              icon="arrow-left"
+              onPress={navigation.goBack}
+              type="light"
+              style={styles.backButton}
+            />
           ) : null}
           <View style={styles.contentContainer}>
             <Appbar.Content
@@ -89,6 +96,9 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: 'bold',
     letterSpacing: 0.5,
+  },
+  backButton: {
+    marginLeft: 16,
   },
 });
 

@@ -8,7 +8,7 @@ interface AboutThisLeadProps {
   lead: Lead;
   onAddTag: (newTag: string) => void;
   onRemoveTag: (tagIndex: number) => void;
-  onAddNote: () => void;
+  onAddNote?: () => void;
   onUpdateNote?: (note: string) => void;
 }
 

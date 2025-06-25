@@ -1,3 +1,4 @@
+import ActionBarIcon from '@components/ActionBarIcon';
 import { FilterState } from '@components/FilterPopover';
 import LeadCard from '@components/LeadCard';
 import ScrollHeader from '@components/ScrollHeader';
@@ -13,9 +14,9 @@ import { RootStackParamList } from '@navigation/index';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useNavigationPageContext } from 'context/NavigationPageContext';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Appbar, FAB, List } from 'react-native-paper';
+import { FAB, List, useTheme } from 'react-native-paper';
 import Animated, {
   FadeInDown,
   FadeOutUp,
@@ -32,6 +33,7 @@ export default function LeadListScreen({ navigation }: Props) {
   const settingsPopoverRef = useRef<SettingsPopoverRef>(null);
   const searchAndFiltersRef = useRef<SearchAndFiltersRef>(null);
   const { stickyHeaderHeight } = useNavigationPageContext();
+  const theme = useTheme();
   // Search and filter state
   const [searchValue, setSearchValue] = useState('');
   const [filters, setFilters] = useState<FilterState>({ sortBy: 'name' });
@@ -124,22 +126,20 @@ export default function LeadListScreen({ navigation }: Props) {
         scrollY={scrollY}
         style={isSearchActive ? { display: 'none' } : undefined}
         renderRight={() => (
-          <>
-            <Appbar.Action
+          <View style={styles.headerActions}>
+            <ActionBarIcon
               icon="magnify"
               onPress={() => setIsSearchActive(true)}
               accessibilityLabel="Search"
-              size={24}
-              style={{ margin: 0 }}
+              type="dark"
             />
-            <Appbar.Action
+            <ActionBarIcon
               icon="cog"
               onPress={() => settingsPopoverRef.current?.show()}
               accessibilityLabel="Settings"
-              size={20}
-              style={{ margin: 0 }}
+              type="dark"
             />
-          </>
+          </View>
         )}
       >
         {isSearchActive && (
@@ -196,12 +196,11 @@ export default function LeadListScreen({ navigation }: Props) {
             <ScrollHeader
               scrollY={scrollY}
               renderRight={() => (
-                <Appbar.Action
+                <ActionBarIcon
                   icon="cog"
                   onPress={() => settingsPopoverRef.current?.show()}
                   accessibilityLabel="Settings"
-                  size={20}
-                  style={{ margin: 0 }}
+                  type="light"
                 />
               )}
             >
@@ -243,3 +242,10 @@ export default function LeadListScreen({ navigation }: Props) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  headerActions: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+});

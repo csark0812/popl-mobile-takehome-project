@@ -140,7 +140,16 @@ const AddNewTagPopover = forwardRef<AddNewTagPopoverRef, AddNewTagPopoverProps>(
             >
               Recent
             </Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <ScrollView
+              style={{
+                marginHorizontal: -20,
+              }}
+              contentContainerStyle={{
+                paddingHorizontal: 20,
+              }}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            >
               <View style={styles.recentTags}>
                 {RECENT_TAGS.map((tag, index) => (
                   <TouchableOpacity

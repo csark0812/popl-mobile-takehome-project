@@ -29,7 +29,7 @@ function AppImpl() {
       <PaperProvider theme={theme}>
         <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
         <Navigation />
-        <Toast visibilityTime={1000} topOffset={top} config={toastConfig} />
+        <Toast visibilityTime={5000} topOffset={top} config={toastConfig} />
       </PaperProvider>
     </QueryClientProvider>
   );
