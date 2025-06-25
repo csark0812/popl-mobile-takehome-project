@@ -66,12 +66,20 @@ export default function DetailsHeroSection({
     >
       <View style={styles.header}>
         <View style={styles.avatarContainer}>
-          <Avatar.Text
-            size={72}
-            label={initials}
-            style={[{ backgroundColor: temperatureColor }]}
-            labelStyle={styles.avatarLabel}
-          />
+          {lead.image ? (
+            <Avatar.Image
+              size={72}
+              source={{ uri: lead.image }}
+              style={[{ backgroundColor: temperatureColor }]}
+            />
+          ) : (
+            <Avatar.Text
+              size={72}
+              label={initials}
+              style={[{ backgroundColor: temperatureColor }]}
+              labelStyle={styles.avatarLabel}
+            />
+          )}
         </View>
 
         <View style={styles.heroInfo}>

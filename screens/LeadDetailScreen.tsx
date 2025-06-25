@@ -69,11 +69,8 @@ export default function LeadDetailScreen({ route, navigation }: Props) {
   }, [lead?.email]);
 
   const handleEdit = useCallback(() => {
-    Alert.alert(
-      'Edit Lead',
-      'Edit functionality would navigate to edit screen',
-    );
-  }, []);
+    navigation.navigate('EditLead', { leadId });
+  }, [navigation, leadId]);
 
   const handleShare = useCallback(() => {
     Alert.alert('Share Lead', 'Share functionality would open share dialog');

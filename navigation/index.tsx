@@ -14,6 +14,7 @@ export type RootStackParamList = {
   LeadList: undefined;
   LeadDetail: { leadId: string };
   NewLead: undefined;
+  EditLead: { leadId: string };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -56,6 +57,11 @@ export default function RootNavigator() {
               name="NewLead"
               component={NewLeadScreen}
               options={{ title: 'New Lead', presentation: 'modal' }}
+            />
+            <Stack.Screen
+              name="EditLead"
+              component={require('../screens/EditLeadScreen').default}
+              options={{ title: 'Edit Lead', presentation: 'modal' }}
             />
           </>
         )}

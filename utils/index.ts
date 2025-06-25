@@ -14,7 +14,7 @@ export const getGreeting = (name: string | undefined) => {
     greeting = 'Good evening';
     emoji = '🌙';
   }
-  return `${greeting},${name || 'User'}`;
+  return `${greeting}, ${name || 'User'}`;
 };
 
 // Email validation regex - basic but comprehensive

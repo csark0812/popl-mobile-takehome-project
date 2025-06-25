@@ -204,8 +204,7 @@
       "name": "Dr. Messy Data",
       "email": "messy.data@mixed-case.com",
       "tags": [
-        "TEST",
-        "test"
+        "TEST"
       ],
       "notes": "Test",
       "createdAt": "2025-06-25T10:24:34.094Z",

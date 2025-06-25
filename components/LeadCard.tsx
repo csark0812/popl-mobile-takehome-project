@@ -28,6 +28,7 @@ const LeadCard: React.FC<LeadCardProps> = ({
   title,
   phone,
   tags,
+  image,
 }) => {
   const theme = useTheme();
   const navigation =
@@ -86,12 +87,20 @@ const LeadCard: React.FC<LeadCardProps> = ({
       <Card.Content style={styles.content}>
         {/* Avatar and Contact Actions Row */}
         <View style={styles.primarySection}>
-          <Avatar.Text
-            size={56}
-            label={initials}
-            style={styles.avatar}
-            labelStyle={styles.avatarLabel}
-          />
+          {typeof image === 'string' && image ? (
+            <Avatar.Image
+              size={56}
+              source={{ uri: image }}
+              style={styles.avatar}
+            />
+          ) : (
+            <Avatar.Text
+              size={56}
+              label={initials}
+              style={styles.avatar}
+              labelStyle={styles.avatarLabel}
+            />
+          )}
 
           {/* Contact Actions */}
           <View style={styles.contactActions}>

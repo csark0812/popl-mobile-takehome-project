@@ -2,23 +2,49 @@ import { FormConfig, leadsApi } from '@api/leadsApi';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Lead } from '@types';
 import { cleanLeadData, cleanLeadsData } from '@utils';
+import { useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 
 // Fetch all leads
 export function useLeads() {
-  return useQuery<Lead[], Error>({
+  const query = useQuery<Lead[], Error>({
     queryKey: ['leads'],
     queryFn: () => leadsApi.getAll().then((res) => cleanLeadsData(res.data)),
   });
+
+  useEffect(() => {
+    if (query.isError && query.error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Failed to Load Leads',
+        text2: query.error.message || 'An error occurred while fetching leads.',
+      });
+    }
+  }, [query.isError, query.error]);
+
+  return query;
 }
 
 // Fetch a single lead by ID
 export function useLead(id: string) {
-  return useQuery<Lead, Error>({
+  const query = useQuery<Lead, Error>({
     queryKey: ['leads', id],
     queryFn: () => leadsApi.getById(id).then((res) => cleanLeadData(res.data)),
     enabled: !!id,
   });
+
+  useEffect(() => {
+    if (query.isError && query.error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Failed to Load Lead',
+        text2:
+          query.error.message || 'An error occurred while fetching the lead.',
+      });
+    }
+  }, [query.isError, query.error]);
+
+  return query;
 }
 
 // Create a new lead
@@ -29,6 +55,18 @@ export function useCreateLead() {
       leadsApi.create(data).then((res) => cleanLeadData(res.data)),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['leads'] });
+      Toast.show({
+        type: 'success',
+        text1: 'Lead Created',
+        text2: 'The new lead has been created successfully.',
+      });
+    },
+    onError: (error) => {
+      Toast.show({
+        type: 'error',
+        text1: 'Create Failed',
+        text2: error.message || 'Unable to create lead.',
+      });
     },
   });
 }
@@ -152,16 +190,42 @@ export function useDeleteLead() {
     mutationFn: (id) => leadsApi.delete(id).then((res) => res.data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['leads'] });
+      Toast.show({
+        type: 'success',
+        text1: 'Lead Deleted',
+        text2: 'The lead has been deleted successfully.',
+      });
+    },
+    onError: (error) => {
+      Toast.show({
+        type: 'error',
+        text1: 'Delete Failed',
+        text2: error.message || 'Unable to delete lead.',
+      });
     },
   });
 }
 
 // Fetch form configuration
 export function useFormConfig() {
-  return useQuery<FormConfig, Error>({
+  const query = useQuery<FormConfig, Error>({
     queryKey: ['form-config'],
     queryFn: () => leadsApi.getFormConfig().then((res) => res.data),
     staleTime: 5 * 60 * 1000, // 5 minutes - form config doesn't change often
     gcTime: 30 * 60 * 1000, // 30 minutes
   });
+
+  useEffect(() => {
+    if (query.isError && query.error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Failed to Load Form Config',
+        text2:
+          query.error.message ||
+          'An error occurred while fetching form configuration.',
+      });
+    }
+  }, [query.isError, query.error]);
+
+  return query;
 }

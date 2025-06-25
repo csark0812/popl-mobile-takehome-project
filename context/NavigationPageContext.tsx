@@ -37,22 +37,23 @@ export const NavigationPageProvider = ({
   const scrollHeader = (value: number) => {
     headerSharedValue.value = value;
   };
+
+  const contextValue: NavigationPageContextType = {
+    headerHeight,
+    setHeaderHeight,
+    stickyHeaderHeight,
+    setStickyHeaderHeight,
+    headerSharedValue,
+    scrollHeader,
+    alwaysShow,
+    setAlwaysShow,
+    options,
+    route,
+    navigation,
+  } as any;
+
   return (
-    <NavigationPageContext.Provider
-      value={{
-        headerHeight,
-        setHeaderHeight,
-        stickyHeaderHeight,
-        setStickyHeaderHeight,
-        headerSharedValue,
-        scrollHeader,
-        alwaysShow,
-        setAlwaysShow,
-        options,
-        route,
-        navigation,
-      }}
-    >
+    <NavigationPageContext.Provider value={contextValue}>
       {children}
     </NavigationPageContext.Provider>
   );
