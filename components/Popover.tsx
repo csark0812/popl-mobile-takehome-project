@@ -103,8 +103,7 @@ const Popover = forwardRef<PopoverRef, PopoverProps>(
         >
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={{ flex: 1, width: '100%' }}
-            enabled
+            style={styles.keyboardAvoidingView}
           >
             <AnimatedPressable
               style={StyleSheet.absoluteFillObject}
@@ -146,10 +145,15 @@ const Popover = forwardRef<PopoverRef, PopoverProps>(
 const styles = StyleSheet.create({
   modalContainer: {
     height: '100%',
+
+    overflow: 'visible',
+  },
+  keyboardAvoidingView: {
+    flex: 1,
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    overflow: 'visible',
   },
   popoverContainer: {
     width: width - 40,
