@@ -101,7 +101,11 @@
       "company": "Acme Corporation",
       "title": "Chief Technology Officer",
       "phone": "+1 (555) 123-4567",
-      "tags": ["enterprise", "tech", "high-priority"],
+      "tags": [
+        "enterprise",
+        "tech",
+        "high-priority"
+      ],
       "notes": "Interested in enterprise solution",
       "createdAt": "2024-03-15T08:30:00Z",
       "image": "https://randomuser.me/api/portraits/men/1.jpg"
@@ -113,7 +117,10 @@
       "company": "TechStart",
       "title": "Founder",
       "phone": "+1 (555) 987-6543",
-      "tags": ["startup", "referral"],
+      "tags": [
+        "startup",
+        "referral"
+      ],
       "notes": "Startup looking for scalable solutions",
       "createdAt": "2024-03-18T10:20:00Z",
       "image": "https://randomuser.me/api/portraits/women/2.jpg"
@@ -125,7 +132,10 @@
       "company": "Global Technologies",
       "title": "VP of Sales",
       "phone": "+1 (555) 234-5678",
-      "tags": ["enterprise", "sales"],
+      "tags": [
+        "enterprise",
+        "sales"
+      ],
       "notes": "Follow up needed on pricing discussion",
       "createdAt": "2024-03-10T09:15:00Z",
       "image": "https://randomuser.me/api/portraits/men/3.jpg"
@@ -137,7 +147,10 @@
       "company": "Innovate Co",
       "title": "Director of Operations",
       "phone": "+1 (555) 345-6789",
-      "tags": ["operations", "mid-market"],
+      "tags": [
+        "operations",
+        "mid-market"
+      ],
       "notes": "Met at TechConf 2024",
       "createdAt": "2024-03-05T15:45:00Z",
       "image": "https://randomuser.me/api/portraits/women/4.jpg"
@@ -149,7 +162,10 @@
       "company": "CloudScape",
       "title": "Product Manager",
       "phone": "+1 (555) 567-8901",
-      "tags": ["product", "mobile"],
+      "tags": [
+        "product",
+        "mobile"
+      ],
       "notes": "Interested in mobile solutions",
       "createdAt": "2024-03-12T13:30:00Z",
       "image": "https://randomuser.me/api/portraits/women/5.jpg"
@@ -161,7 +177,9 @@
       "company": "NextStep Education",
       "title": "CEO",
       "phone": "+1 (555) 678-9012",
-      "tags": ["enterprise"],
+      "tags": [
+        "enterprise"
+      ],
       "notes": "Looking for educational integration",
       "createdAt": "2024-03-08T16:20:00Z",
       "image": "https://randomuser.me/api/portraits/men/6.jpg"
@@ -173,7 +191,10 @@
       "company": "Digital Edge",
       "title": "Marketing Director",
       "phone": "+1 (555) 789-0123",
-      "tags": ["marketing", "analytics"],
+      "tags": [
+        "marketing",
+        "analytics"
+      ],
       "notes": "Interested in analytics features",
       "createdAt": "2024-03-20T09:00:00Z",
       "image": "https://randomuser.me/api/portraits/women/7.jpg"
@@ -182,7 +203,10 @@
       "id": "c3d4e5f6-g7h8-9i0j-1k2l-m3n4o5p6q7r8",
       "name": "Dr. Messy Data",
       "email": "messy.data@mixed-case.com",
-      "tags": ["TEST", "test"],
+      "tags": [
+        "TEST",
+        "test"
+      ],
       "notes": "Test",
       "createdAt": "2025-06-25T10:24:34.094Z",
       "image": "https://randomuser.me/api/portraits/men/8.jpg"
@@ -212,6 +236,11 @@
       "name": "Test",
       "email": "Email.com",
       "image": "https://randomuser.me/api/portraits/men/10.jpg"
+    },
+    {
+      "id": "1c82",
+      "name": "Test",
+      "email": "csark0812@gmail.com"
     }
   ]
 }
