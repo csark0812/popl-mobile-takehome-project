@@ -1,128 +1,102 @@
-# 📱 Popl Mobile Take-Home Project
+# 📱 Popl Mobile Take-Home Project — Implementation Summary
 
-Welcome — and thanks for your time.
+This project implements the Popl lead management flow as specified in the take-home requirements. Below is how each requirement is satisfied, with references to the relevant files and components in the codebase.
 
-This take-home project is designed to simulate a **real-world lead management flow**, similar to patterns we use at Popl. We're using this to understand how you reason about **data flow**, **state**, **API integration**, and **UI behavior** in a modern React Native codebase.
-
-This isn't about perfection — it's about how you **think**.
-
-## 🧠 What You'll Be Building
-
-A lightweight mobile app (3 screens) for managing "leads":
+## 🧠 Core Requirements Implemented
 
 ### 1. **Lead List Screen**
 
-- Fetches and displays a list of leads from a mock API
-- Supports basic **search** and **sort** (by name or creation date)
-- Tapping a lead should navigate to its detail view
+- **File:** [`screens/LeadListScreen.tsx`](./screens/LeadListScreen.tsx)
+- Fetches and displays leads from mock API using React Query (`hooks/api.ts`)
+- Search functionality with debouncing (`hooks/useDebounce.ts`)
+- Sort by name or creation date via `FilterPopover` component
+- Navigation to detail view on tap
+- Loading states with skeleton components (`components/LeadCardSkeleton.tsx`)
+- Error and empty states with fallback UI
 
 ### 2. **Lead Detail Screen**
 
-- Displays all lead details (name, company, tags, etc.)
-- Use either navigation-passed data or fetch by ID (up to you)
+- **File:** [`screens/LeadDetailScreen.tsx`](./screens/LeadDetailScreen.tsx)
+- Displays complete lead information fetched by ID
+- Tag management with add/remove functionality
+- Notes editing with optimistic updates
+- Delete functionality with confirmation
+- Contact actions (call/email) with native integrations
+- Loading state with detailed skeleton (`components/LeadDetailSkeleton.tsx`)
 
 ### 3. **New Lead Screen**
 
-- Basic form to create a new lead (name, email, etc.)
-- Submits via a mock API (`POST /leads`)
-- Consider optimistic updates or a refresh pattern
+- **File:** [`screens/NewLeadScreen.tsx`](./screens/NewLeadScreen.tsx)
+- Dynamic form generation from `/form-config` API endpoint (see [`hooks/api.ts`](./hooks/api.ts))
+- Form validation with real-time error handling (`hooks/useFormState.ts`)
+- Optimistic updates on submission
+- Image picker integration for lead photos
+- Modal presentation with proper navigation
 
-## 🛠 Stack (already scaffolded)
+## 🛠 Technical Implementation
 
-- **React Native (Expo)**
-- **TypeScript**
-- **React Navigation**
-- **React Native Paper** (UI components)
-- **Axios** for API
-- **React Query** for data fetching/caching
+### Code Architecture
 
-You'll find basic folders and some static data already wired up.
+- **API Layer:** [`hooks/api.ts`](./hooks/api.ts) - Centralized API calls and React Query hooks
+- **State Management:** React Query for server state, Zustand for client state (`hooks/sessionStore.ts`)
+- **Navigation:** [`navigation/index.tsx`](./navigation/index.tsx) - Proper React Navigation setup with TypeScript
+- **Components:** Modular, reusable components in [`components/`](./components/)
+- **Type Safety:** Complete TypeScript coverage with interfaces in [`types/index.ts`](./types/index.ts)
 
-**📱 Platform Requirements:**
+### Loading & Error Handling
 
-- **iOS is required** (test on iOS simulator or device)
-- Android is optional but iOS must work flawlessly
-- Do not use Expo web — this is a mobile-only project
+- **Skeletons:** [`components/LeadCardSkeleton.tsx`](./components/LeadCardSkeleton.tsx), [`components/LeadDetailSkeleton.tsx`](./components/LeadDetailSkeleton.tsx)
+- **Error States:** Graceful fallbacks with retry functionality in all screens
+- **Empty States:** Contextual messaging and call-to-action buttons
 
-## ✅ What We're Evaluating
+## 💡 Optional Enhancements Completed
 
-**⚠️ Important:** We have high standards for this project. With AI tools readily available, we expect submissions to be **bug-free** and have a **high degree of polish**. Light bugs, poor UI, or basic implementation issues that were acceptable in the past will not lead to a next round interview.
+1. **🔧 Dynamic Form Support**
 
-We're less interested in pixel-perfect design and more in:
+   - Form configuration loaded from `/form-config` endpoint via [`hooks/api.ts`](./hooks/api.ts)
+   - Dynamic field rendering in [`components/Form.tsx`](./components/Form.tsx)
+   - Validation rules applied from API configuration
+   - Used in both New Lead and Edit Lead screens
 
-- 📐 **Code clarity and structure**
-- 🧱 **Separation of concerns (API, types, UI, data)**
-- 🧭 **Correct and idiomatic use of React Navigation**
-- 🔁 **Loading, error, and edge-case handling**
-- 🧠 **Practical reasoning**: do you solve problems like someone we'd want to ship features with?
+2. **🧠 Enhanced Loading/Error UI**
 
-Bonus points for:
+   - Custom skeleton components for all loading states
+   - Contextual error messages with retry options
+   - Empty state designs with clear next actions
 
-- 👁 Thoughtful UX polish
-- 🧪 Basic testability
-- 📂 A sensible folder and component structure
+3. **🔍 Debounced Search**
 
-## 🧪 Mock API Instructions
+   - [`hooks/useDebounce.ts`](./hooks/useDebounce.ts) prevents excessive API calls
+   - 300ms delay for optimal UX performance
 
-We use `json-server` to simulate a backend.
+4. **🧪 Test Coverage**
 
-### Start the mock API:
+   - Unit tests in [`tests/`](./tests/) covering components, hooks, and utilities
+   - Jest configuration for React Native environment
+   - Run all tests with `npm run test`
+
+5. **🎨 Theme Toggle**
+
+   - Users can toggle between light and dark themes via the settings or action bar (see `components/ChangeThemeAction.tsx`)
+   - Theme preference is persisted across sessions
+
+6. **📶 Offline Persistence**
+   - Session state persisted to AsyncStorage via Zustand middleware
+   - User preferences and authentication survive app restarts
+
+## 🧪 Mock API Setup
 
 ```bash
-npm run api
+npm run api  # Serves from http://localhost:3001/leads
 ```
 
-This will serve from:
-[http://localhost:3001/leads](http://localhost:3001/leads)
+## Known Limitations
 
-### Available endpoints:
+- **Android Animation Crash:** Known `react-native-reanimated` issue with entering/exiting animations. See [GitHub issue #7493](https://github.com/software-mansion/react-native-reanimated/issues/7493#issuecomment-3002083686)
+- **Keyboard Handling:** Some edge cases due to Expo Go limitations (cannot use `react-native-keyboard-controller`)
+- **Static Skeletons:** No animated skeletons due to React 19 + Expo Go compatibility constraints
 
-- `GET /leads` – fetch all
-- `GET /leads/:id` – fetch one
-- `POST /leads` – create
-- `PUT /leads/:id` – full replace
-- `PATCH /leads/:id` – partial update
-- `DELETE /leads/:id` – delete
+## Platform Support
 
-🕗 Note: a small artificial delay is applied to all responses (via interceptor) to simulate real-world async behavior.
-
-## 💡 Optional Enhancements (in loose priority order)
-
-If you're feeling ambitious, consider adding one or more of these:
-
-1. **🔧 Dynamic form support**
-
-   - Add a toggle at the top of the "New Lead" screen for "Default" vs "Custom"
-   - Load custom field mappings from a mock `/form-config` API and append to the form dynamically
-   - This reflects a real pattern in our production app
-
-2. **🧠 Improve loading/empty/error UI**
-
-   - E.g. loading skeletons, "No results" states, graceful error fallback
-
-3. **🔍 Debounced search**
-
-   - Prevent over-rendering on every keystroke using `useDebounce` or `lodash.debounce`
-
-4. **🧪 Tests**
-
-   - Basic unit or component tests — not required, but a nice bonus
-
-5. **📦 Global app config or user state**
-
-   - Introduce Redux or Zustand to manage a simple user session or settings
-
-6. **📶 Offline persistence**
-
-   - Use something like `AsyncStorage` or `react-query`'s persistence layer to survive refreshes or flight mode
-
-## 📬 How to Submit
-
-Send us either:
-
-- A GitHub repo link (public or invite us)
-- A zip file of the completed project
-
-Optional: add a short note if you left anything out intentionally, or want to clarify something about your implementation.
-
-We're looking forward to reviewing your work! Thanks again — and have fun with it. 🙏
+- **iOS:** Fully tested and functional
+- **Android:** Functional with noted animation limitation

@@ -42,7 +42,7 @@ const FilterPopover = forwardRef<FilterPopoverRef, FilterPopoverProps>(
     const styles = createStyles(theme);
 
     return (
-      <Popover ref={popoverRef} maxWidth={280} onDismiss={onDismiss}>
+      <Popover ref={popoverRef} maxWidth={320} onDismiss={onDismiss}>
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerLeft}>
@@ -109,18 +109,18 @@ const createStyles = (theme: any) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'flex-start',
-      paddingHorizontal: 20,
-      paddingVertical: 16,
+      paddingHorizontal: 18,
+      paddingVertical: 14,
       borderBottomWidth: 1,
       borderBottomColor: theme.colors.outlineVariant,
     },
     headerLeft: {
       flex: 1,
-      marginRight: 8,
+      marginRight: 10,
     },
     title: {
       color: theme.colors.onSurface,
-      marginBottom: 4,
+      marginBottom: 5,
     },
     subtitle: {
       color: theme.colors.onSurfaceVariant,
@@ -129,11 +129,11 @@ const createStyles = (theme: any) =>
       margin: 0,
     },
     section: {
-      paddingVertical: 8,
+      paddingVertical: 10,
     },
     listItem: {
-      paddingHorizontal: 20,
-      paddingVertical: 4,
+      paddingHorizontal: 18,
+      paddingVertical: 7,
     },
   });
 
